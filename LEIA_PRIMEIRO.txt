@@ -1,0 +1,11 @@
+DEAD SOULS — MCE1809 | BETA 0.2
+
+Atualização da Beta 0.1: menu Começar > Saves, três perfis locais, fogueira antes de cada horda, vida recuperada, morte "Você Não Resistiu" e retorno ao último checkpoint.
+Novidade: analógico circular com movimento proporcional, movimento em qualquer direção, ataque e esquiva com invulnerabilidade temporária.
+Inimigos mais lentos e com breve preparação antes de atacar.
+
+No GitHub Pages: envie os arquivos EXTRAÍDOS do ZIP para a RAIZ do MESMO repositório e confirme o commit. Não envie apenas o ZIP. Se o navegador não aceitar substituir arquivos iguais, edite cada um pelo botão do lápis ou use o GitHub em modo desktop.
+Após a publicação, abra o jogo com internet para baixar a versão nova e feche/reabra o PWA para receber o cache atualizado.
+
+Salvamentos ficam no localStorage do navegador deste site e não sincronizam entre aparelhos. Só o progresso até a última fogueira é restaurado; o progresso de uma horda incompleta não é salvo.
+"Sair do jogo" retorna ao menu, pois sites não podem fechar livremente abas do navegador.
