@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827"><meta name="description" content="Dungeon de ação original de MCE1809 — Beta 0.1 offline.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="stylesheet" href="style.css">
+<title>Projeto Dungeon — MCE1809 · Beta 0.1</title>
+</head>
+<body>
+<header><div><span class="eyebrow">MCE1809 · BETA 0.1</span><h1>CRIPTA <em>ZERO</em></h1><p>Roguelite de ação original · Visão de cima</p></div><span class="pill">JOGÁVEL · OFFLINE</span></header>
+<main>
+ <section class="gamebox">
+  <div class="hud"><div class="stat"><label>VIDA</label><div class="bar"><span id="lifeBar"></span></div><b id="lifeText">100 / 100</b></div><div class="stat"><label>ENERGIA</label><div class="bar energy"><span id="energyBar"></span></div><b id="energyText">100 / 100</b></div><div class="tally">ABATES <b id="kills">0</b></div><div class="tally">TEMPO <b id="timer">00:00</b></div></div>
+  <div class="stage"><canvas id="screen" width="960" height="576" tabindex="0" aria-label="Arena do jogo"></canvas><div id="message" class="message"><strong>CRIPTA ZERO · BETA 0.1</strong><span>Sobreviva e elimine os inimigos.</span><button id="startBtn">COMEÇAR PARTIDA</button></div></div>
+  <div class="touch" id="touchControls"><div class="pad"><button data-dir="up" class="up" aria-label="Cima">▲</button><button data-dir="left" class="left" aria-label="Esquerda">◀</button><button data-dir="down" class="down" aria-label="Baixo">▼</button><button data-dir="right" class="right" aria-label="Direita">▶</button></div><div class="actions"><button id="attackBtn" class="attack">ATACAR</button><button id="dashBtn" class="dash">ESQUIVA</button></div></div>
+ </section>
+ <aside><section class="panel"><h2>Controles</h2><p><b>Computador:</b> WASD / setas para mover, J ou Espaço para atacar, Shift ou K para esquivar.</p><p><b>Celular:</b> setas na tela, ATACAR e ESQUIVA. O ataque acerta inimigos próximos, na direção do personagem.</p><div class="buttons"><button id="pauseBtn">Pausar</button><button id="restartBtn">Reiniciar</button></div></section>
+ <section class="panel"><h2>O que já existe</h2><p>Movimentação em 4 direções, ataque corpo a corpo, esquiva com invulnerabilidade curta, vida, energia, três tipos de inimigo e ondas progressivas.</p><p class="muted">Os gráficos usam formas originais desenhadas no Canvas; nada depende de arquivos externos ou internet.</p></section><section class="panel"><h2>Projeto</h2><p><strong>Cripta Zero</strong> é o nome provisório. Criado por <strong>MCE1809</strong>.</p><p class="muted">Beta 0.1: uma arena de teste, não um jogo completo.</p></section></aside>
+</main>
+<footer>MCE1809 · CRIPTA ZERO · BETA 0.1 · Funciona em navegador com ou sem internet, depois de carregado</footer>
+<script src="game.js"></script>
+<script>if('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
+</body></html>

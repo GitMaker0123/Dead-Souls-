@@ -1,0 +1,34 @@
+CRIPTA ZERO — MCE1809
+ROTEIRO DE DESENVOLVIMENTO 0.1 A 0.9
+
+0.1 — PRIMEIRA ARENA (ENTREGUE)
+Movimento em quatro direções, ataque de curto alcance, esquiva, energia, vida, inimigos e ondas de combate. Jogo offline em HTML/Canvas. Controles móveis e teclado.
+
+0.2 — ARMAS
+Armas de curto e longo alcance, inventário simples, projéteis e coleta de armas.
+
+0.3 — MASMORRAS
+Salas interligadas, portas, obstáculos, armadilhas, recompensas e transição de sala.
+
+0.4 — INIMIGOS E CHEFES
+IA variada, ataques telegrafados, chefes e efeitos de combate.
+
+0.5 — PROGRESSÃO
+Moedas, lojas, melhorias por partida e salvamento IndexedDB.
+
+0.6 — PERSONAGENS
+Personagens desbloqueáveis, habilidades próprias, equipamentos e aparência.
+
+0.7 — GERAÇÃO PROCEDURAL
+Mapas e desafios diferentes a cada partida, seleção de biomas e eventos.
+
+0.8 — REFINAMENTO
+Animações pixel-art originais, efeitos sonoros, acessibilidade, ajustes de dificuldade e desempenho no celular.
+
+0.9 — PRÉ-LANÇAMENTO
+Campanha curta completa, menus, configurações, testes extensivos e cooperação experimental se a base de rede estiver pronta.
+
+OBSERVAÇÕES
+Este projeto é independente e inspirado no gênero roguelite de ação em visão superior, sem copiar personagens ou recursos de Soul Knight.
+O modo online/multiplayer não está incluído na versão 0.1. Recursos futuros são metas de desenvolvimento, não funcionalidades já implementadas.
+Para publicar como PWA, envie todos os arquivos da pasta para a raiz de um repositório GitHub Pages e ative Settings > Pages > Deploy from branch > main / (root).
