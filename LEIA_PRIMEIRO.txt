@@ -1,11 +1,27 @@
-DEAD SOULS — MCE1809 | BETA 0.2
+DEAD SOULS — MCE1809 — BETA 0.3
 
-Atualização da Beta 0.1: menu Começar > Saves, três perfis locais, fogueira antes de cada horda, vida recuperada, morte "Você Não Resistiu" e retorno ao último checkpoint.
-Novidade: analógico circular com movimento proporcional, movimento em qualquer direção, ataque e esquiva com invulnerabilidade temporária.
-Inimigos mais lentos e com breve preparação antes de atacar.
+NOVIDADES
+- Pátio das Almas: cenário único com piso, rachaduras, colunas, tochas e atmosfera sombria.
+- Celular horizontal: layout compacto; botão Tela cheia / Horizontal (trava dependendo do navegador).
+- Inimigos: corredor, bruto, arqueiro, lanceiro e andarilho, cada um com seu padrão.
+- Chefes: a cada 5 hordas, um dos nove chefes é selecionado aleatoriamente.
+- Ataques de chefe com indicação visual, disparos, investida e golpe em área.
+- Barra de vida de chefe, anúncio, partículas e efeitos visuais.
+- Joystick, esquiva invulnerável, fogueiras e saves da Beta 0.2 preservados.
 
-No GitHub Pages: envie os arquivos EXTRAÍDOS do ZIP para a RAIZ do MESMO repositório e confirme o commit. Não envie apenas o ZIP. Se o navegador não aceitar substituir arquivos iguais, edite cada um pelo botão do lápis ou use o GitHub em modo desktop.
-Após a publicação, abra o jogo com internet para baixar a versão nova e feche/reabra o PWA para receber o cache atualizado.
+ATUALIZAR O GITHUB PAGES
+1. Extraia este ZIP antes de enviar.
+2. Substitua os arquivos antigos na raiz do repositório (ao lado de index.html).
+3. Confirme o commit; em Actions confira se Pages terminou de publicar.
+4. Abra o site com Internet para baixar o cache novo. Feche e reabra o PWA.
+5. NÃO limpe os dados do navegador: os 3 saves antigos continuam usando a chave da Beta 0.2.
 
-Salvamentos ficam no localStorage do navegador deste site e não sincronizam entre aparelhos. Só o progresso até a última fogueira é restaurado; o progresso de uma horda incompleta não é salvo.
-"Sair do jogo" retorna ao menu, pois sites não podem fechar livremente abas do navegador.
+CONTROLES
+Celular: analógico esquerdo, ATAQUE e ESQUIVA direitos. Preferencialmente deitado.
+PC: WASD/setas, J/espaço, Shift/K, Esc para pausa.
+
+OBSERVAÇÕES
+- 'Tela cheia' e trava horizontal podem ser negadas pelo navegador: basta girar o aparelho.
+- Os nove chefes são representações simplificadas originais em Canvas; não usam sprites de jogos comerciais.
+- A vitória na horda 5, 10, 15 etc. retorna à fogueira seguinte.
+- Testes automáticos de sintaxe não substituem testar desempenho no aparelho.
