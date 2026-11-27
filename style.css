@@ -15,3 +15,28 @@
 html,body{height:100%;overflow:hidden}body{padding:3px;background:#090e19}header,aside,footer{display:none!important}main{display:block;width:100%;height:100%}.gamebox{position:relative;display:flex;flex-direction:column;align-items:center;height:100%;padding:2px;border:0;box-shadow:none;background:transparent}.hud{width:min(100%,calc((100dvh - 43px)*1.666667));height:38px;min-height:38px;margin:0;gap:6px;flex-wrap:nowrap}.stat{min-width:0}.stat label{font-size:8px}.stat b,.tally{font-size:9px}.tally{padding:3px 6px}.tally b{font-size:10px}.stage{height:calc(100dvh - 46px);width:min(100%,calc((100dvh - 46px)*1.666667));max-width:100%;aspect-ratio:5/3;flex:0 1 auto}.stage canvas{width:100%;height:100%}.touch{pointer-events:none;position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:min(100%,calc((100dvh - 46px)*1.666667));padding:0 10px;margin:0;z-index:2}.joystick,.actions{pointer-events:auto}.joystick{width:99px;height:99px;background:#18283bbb}.joystick-knob{width:43px;height:43px;margin-left:-21.5px;margin-top:-21.5px}.joystick-ring{inset:15px}.joystick-caption{font-size:8px}.actions button{width:61px;height:61px;font-size:10px;opacity:.85}.message{z-index:4;padding:5px}.menuPage{max-height:100%;width:min(100%,440px);gap:5px}.menuPage h2{font-size:clamp(18px,4vh,27px)}.menuPage button{min-height:28px;padding:5px 8px}.menuPage p{font-size:11px}.saveList{max-height:90px}.bossBanner{top:16%}
 }
 @media (orientation:portrait) and (max-width:700px){body:before{content:'MELHOR EXPERIÊNCIA: GIRE O CELULAR NA HORIZONTAL';position:relative;display:block;text-align:center;font-size:11px;font-weight:800;letter-spacing:.5px;padding:6px;color:#d0dfe6;background:#27354b;border-radius:6px;margin-bottom:6px}}
+
+/* Beta 0.4: menu em vidro escuro, botões consistentes, resposta ao toque e som */
+:root{--accent:#dcb782;--gold:#f4d6a0;--pane:#131c29;--line:#685740}
+body{background:radial-gradient(ellipse at 15% 0,#27384b 0,transparent 55%),linear-gradient(150deg,#0b1019,#151b27 60%,#090e17)}
+header h1{font-family:Georgia,serif;text-shadow:0 5px 20px #0009}header h1 em{color:#e6c28f}
+.pill{background:#2d2725;border-color:#877051;color:#e3c99f}
+.gamebox,.panel{background:linear-gradient(160deg,#1b2534,#101924);border:1px solid #5a5d62;box-shadow:0 12px 28px #0007}
+.stage{border-color:#8a7659;box-shadow:inset 0 0 0 2px #161219}
+.message{background:radial-gradient(ellipse at center,#1e2630ee,#0a101cf9 80%);backdrop-filter:blur(5px)}
+.menuPage{width:min(100%,455px);padding:clamp(6px,1.4vw,20px);gap:10px;scrollbar-width:thin}
+.menuPage:before{content:'✦';display:block;font:24px Georgia,serif;color:#ba946b;opacity:.9;line-height:1}
+.menuPage h2{font-family:Georgia,serif;font-weight:700;letter-spacing:2px;color:#f6e9d7;text-shadow:0 3px 12px #000c}
+.menuPage small{color:#d4b783;font-size:11px;letter-spacing:2px}
+.menuPage p{color:#bec8d1;line-height:1.5}
+.menuPage button,.panel button{transition:transform .12s,background .12s,border-color .12s,filter .12s;cursor:pointer}
+.menuPage button{background:linear-gradient(135deg,#866846,#ad8655);border:1px solid #e8c492;color:#171a23;letter-spacing:.6px;box-shadow:0 3px 13px #0006;border-radius:9px;min-height:43px}
+.menuPage button.secondary{background:#1c2b3b;border-color:#687c86;color:#f4e5d0}
+.menuPage button:active,.panel button:active{transform:scale(.975);filter:brightness(1.15)}
+.menuPage button:focus-visible,.panel button:focus-visible{outline:3px solid #e4c28c;outline-offset:2px}
+.menuPage .deathTitle{color:#ef9399;text-shadow:0 4px 15px #771f30b3;font-size:clamp(22px,4.5vw,36px)}
+.saveSlot{background:#14202d;border-color:#77705e;border-radius:10px;padding:7px}.saveSlot .slotOpen{color:#f4e7d7;text-transform:none;box-shadow:none}.saveSlot .slotDelete{background:#4a2630;color:#f6dce0;border-color:#a15968}
+.menuSound{display:flex;align-items:center;justify-content:center;gap:9px;padding:8px;background:#0a1522a8;border:1px solid #54606a;border-radius:9px;flex-wrap:wrap}.menuSound button{min-width:118px;font-size:11px;padding:8px!important;min-height:34px!important}.menuSound label{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.6px;color:#c9d5df}.menuSound input{accent-color:#caa36c;width:90px;max-width:32vw;height:22px}
+.panel h2{color:#e7c394;font-family:Georgia,serif}.panel .menuSound button{background:#2e4052;border:1px solid #718297;border-radius:8px;color:#f1e1ca}
+.actions .attack{background:radial-gradient(circle at 30% 30%,#ad6573,#6a3045);border-color:#eda7ad}.actions .dash{background:radial-gradient(circle at 30% 30%,#658ba5,#314b6f);border-color:#a2c8d7}
+@media (orientation:landscape) and (max-height:650px){.menuPage{gap:5px;padding:4px 7px}.menuPage:before{font-size:13px;line-height:.8}.menuPage button{min-height:28px}.menuSound{padding:2px 4px;gap:5px}.menuSound button{min-height:27px!important;padding:3px 6px!important}.menuSound label{font-size:9px}.menuPage h2{font-size:clamp(19px,4.5vh,29px)}.message{backdrop-filter:none}}

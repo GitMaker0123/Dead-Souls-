@@ -1,27 +1,10 @@
-DEAD SOULS — MCE1809 — BETA 0.3
+DEAD SOULS — MCE1809 — BETA 0.4
+==================================
+Novidades: nove chefes com padrões de ataque diferenciados (golpes em área, leques, rajadas circulares, combos, investidas), Web Audio sintetizado (ataque, esquiva, dano, morte, menu, chefes, fogueira) com controle de volume e botão liga/desliga. Menus reformulados, modo horizontal e saves da beta 0.2/0.3 preservados.
 
-NOVIDADES
-- Pátio das Almas: cenário único com piso, rachaduras, colunas, tochas e atmosfera sombria.
-- Celular horizontal: layout compacto; botão Tela cheia / Horizontal (trava dependendo do navegador).
-- Inimigos: corredor, bruto, arqueiro, lanceiro e andarilho, cada um com seu padrão.
-- Chefes: a cada 5 hordas, um dos nove chefes é selecionado aleatoriamente.
-- Ataques de chefe com indicação visual, disparos, investida e golpe em área.
-- Barra de vida de chefe, anúncio, partículas e efeitos visuais.
-- Joystick, esquiva invulnerável, fogueiras e saves da Beta 0.2 preservados.
+PUBLICAÇÃO NO GITHUB PAGES:
+Extraia o ZIP. Substitua na raiz do repositório TODOS os arquivos, inclusive audio.js e sw.js. O arquivo index.html precisa ficar na raiz. Faça commit. Entre no site conectado à internet e recarregue para instalar o cache novo.
 
-ATUALIZAR O GITHUB PAGES
-1. Extraia este ZIP antes de enviar.
-2. Substitua os arquivos antigos na raiz do repositório (ao lado de index.html).
-3. Confirme o commit; em Actions confira se Pages terminou de publicar.
-4. Abra o site com Internet para baixar o cache novo. Feche e reabra o PWA.
-5. NÃO limpe os dados do navegador: os 3 saves antigos continuam usando a chave da Beta 0.2.
+Android: som precisa de um toque inicial para habilitar áudio (limitação do navegador). Funciona offline após cache completo; primeira visita precisa de internet.
 
-CONTROLES
-Celular: analógico esquerdo, ATAQUE e ESQUIVA direitos. Preferencialmente deitado.
-PC: WASD/setas, J/espaço, Shift/K, Esc para pausa.
-
-OBSERVAÇÕES
-- 'Tela cheia' e trava horizontal podem ser negadas pelo navegador: basta girar o aparelho.
-- Os nove chefes são representações simplificadas originais em Canvas; não usam sprites de jogos comerciais.
-- A vitória na horda 5, 10, 15 etc. retorna à fogueira seguinte.
-- Testes automáticos de sintaxe não substituem testar desempenho no aparelho.
+Atenção: progresso salvo localmente no navegador; NÃO limpar dados do site. Contém conteúdo original de jogo; os nomes dos chefes são ideias de protótipo.
