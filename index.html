@@ -1,10 +1,10 @@
 <!doctype html><html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101827"><meta name="description" content="Dead Souls — roguelite 2D de MCE1809. Pré-Demo 1.1.3 Fixed.">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png?v=113"><link rel="stylesheet" href="style.css">
-<title>Dead Souls · Pré-Demo 1.1.3 Fixed · MCE1809</title></head><body>
+<meta name="theme-color" content="#101827"><meta name="description" content="Dead Souls — roguelite 2D de MCE1809. Pré-Demo 1.1.3 Fixed 2.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png?v=113fixed2"><link rel="stylesheet" href="style.css?v=113fixed2">
+<title>Dead Souls · Pré-Demo 1.1.3 Fixed 2 · MCE1809</title></head><body>
 
-<main><section class="gamebox"><span class="versionStamp" aria-label="Versão do jogo">PRÉ-DEMO 1.1.3 FIXED</span><span id="activeProfile" hidden></span><span id="statusText" hidden></span><button id="quickFullscreen" type="button" aria-label="Tela cheia" title="Tela cheia">⛶</button><button id="pauseBtn" type="button" aria-label="Pausar" title="Pausar">Ⅱ</button><button id="menuBtn" type="button" hidden>Menu</button>
+<main><section class="gamebox"><span class="versionStamp" aria-label="Versão do jogo">PRÉ-DEMO 1.1.3 FIXED 2</span><span id="activeProfile" hidden></span><span id="statusText" hidden></span><button id="quickFullscreen" type="button" aria-label="Tela cheia" title="Tela cheia">⛶</button><button id="pauseBtn" type="button" aria-label="Pausar" title="Pausar">Ⅱ</button><button id="menuBtn" type="button" hidden>Menu</button>
 <div class="hud"><div class="stat"><label>VIDA</label><div class="bar"><span id="lifeBar"></span></div><b id="lifeText">100 / 100</b></div><div class="stat"><label>VIGOR</label><div class="bar energy"><span id="energyBar"></span></div><b id="energyText">100 / 100</b></div><div class="tally">SALA <b id="wave">1</b></div><div class="tally">CURAS <b id="flasksText">3 / 3</b></div><div class="tally extra">ABATES <b id="kills">0</b></div><div class="tally">TEMPO <b id="timer">00:00</b></div></div>
 <div class="stage"><div id="bossBanner" class="bossBanner" hidden></div><canvas id="screen" width="960" height="576" tabindex="0" aria-label="Arena de Dead Souls"></canvas>
 <div class="message" id="message">
@@ -21,4 +21,4 @@
 <div class="touch" id="touchControls" hidden><div class="joystick" id="joystick" aria-label="Analógico virtual para movimentação"><div class="joystick-ring"></div><div class="joystick-knob" id="joystickKnob"></div><span class="joystick-caption">MOVER</span></div><div class="actions"><button id="attackBtn" class="attack">ATACAR</button><button id="strongAttackBtn" class="attack">FORTE</button><button id="dashBtn" class="dash">ESQUIVA</button><button id="healActionBtn" class="heal">CURAR</button><button id="interactBtn" class="interact">INTERAGIR</button></div></div>
 </section></main>
 
-<script src="audio.js"></script><script src="actors.js"></script><script src="game.js"></script><script>if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script></body></html>
+<script src="audio.js?v=113fixed2"></script><script src="actors.js?v=113fixed2"></script><script src="game.js?v=113fixed2"></script><script>if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=113fixed2', {updateViaCache:'none'}).catch(()=>{}));</script></body></html>
