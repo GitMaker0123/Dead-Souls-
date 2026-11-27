@@ -99,7 +99,7 @@ function spawnEnemy(){const r=Math.random(),type=r<.20?'brute':r<.43?'runner':r<
  const base={brute:[91,39,22,22],runner:[35,76,14,9],archer:[41,52,16,11],spearman:[62,58,18,15],wanderer:[52,53,17,13]}[type],scale=1+Math.min(1.1,(wave-1)*.045);
  enemies.push({x,y,r:base[2],type,speed:base[1],hp:Math.round(base[0]*scale),maxHp:Math.round(base[0]*scale),dmg:base[3],attackCD:rand(.6,1.6),flash:0,windup:0,hit:false,strafe:Math.random()<.5?-1:1});}
 function fireProjectile(e,angle,speed=235,damage=12,color='#d89bf0',size=8){if(projectiles.length>180)return;projectiles.push({x:e.x,y:e.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,r:size,dmg:damage,life:4,color});}
-function applyPlayerDamage(dmg,x,y){if(state!=='playing'||player.invuln>0)return;player.hp=Math.max(0,player.hp-dmg);player.invuln=.65;player.flash=.22;shake=.15;SFX('hit');spark(player.x,player.y,'#ff899a',15);if(player.hp<=0)die()}
+function applyPlayerDamage(dmg,x,y){if(state!=='playing'||player.invuln>0)return;player.hp=Math.max(0,player.hp-dmg);player.invuln=.65;player.flash=.22;shake=.15;if(player.hp>0)SFX(player.gender==='feminino'?'hitFemale':'hitMale');spark(player.x,player.y,'#ff899a',15);if(player.hp<=0)die()}
 function updateBoss(e,dt){
  e.attackCD=Math.max(0,e.attackCD-dt);e.flash=Math.max(0,e.flash-dt);const dx=player.x-e.x,dy=player.y-e.y,dist=Math.max(1,Math.hypot(dx,dy)),aim=Math.atan2(dy,dx);
  if(e.telegraph){const t=e.telegraph;t.t-=dt;if(t.t<=0){e.telegraph=null;e.attackCD=(e.kind==='abyss'||e.kind==='reaper')?.68:1.18;SFX('enemy');

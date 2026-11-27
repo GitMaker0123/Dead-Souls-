@@ -58,3 +58,6 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 @media(max-height:410px){.createPage{gap:2px}.createPage h2{font-size:19px}.letterKeyboard button{min-height:23px}.createPage .genderCard{min-height:46px}.genderGlyph{font-size:20px}}
 
 #menuHome{position:relative;isolation:isolate}#menuHome::before{content:'';position:absolute;z-index:-1;inset:-12px;background:linear-gradient(#0a111bc8,#0a111beb),url('icon-512.png') center 30%/contain no-repeat;opacity:.65;pointer-events:none}#menuHome h2{color:#e6c68b;text-shadow:0 0 14px #674824}
+
+/* Pré-Demo 1.1.2: versão discreta, não interativa. */
+.versionStamp{position:absolute;left:8px;top:44px;z-index:8;pointer-events:none;color:#e1cba5;font:700 clamp(9px,1.4vw,12px)/1.2 system-ui,sans-serif;letter-spacing:.08em;text-shadow:0 2px 5px #080c13cc;background:#101a2bbb;border:1px solid #9f8d6655;border-radius:4px;padding:4px 6px;opacity:.85}

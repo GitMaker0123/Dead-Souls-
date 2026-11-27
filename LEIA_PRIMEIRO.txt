@@ -1,19 +1,14 @@
-DEAD SOULS — PRÉ-DEMO 1.1 — MCE1809
+DEAD SOULS — PRÉ-DEMO 1.1.2 — MCE1809
 
-NOVIDADES
-- Ícone DEAD SOULS original (192 e 512), espada e chamas azuis.
-- Pátio Externo: detalhes de pedra, gelo, ruínas e cenário pré-renderizado.
-- Caminhada: animação com pernas alternadas, oscilação de tronco e passos sintetizados.
-- Dano: grunhido eletrônico curto; morte: grito eletrônico prolongado (não são gravações de voz humana).
-- Fogueira refeita: círculo de pedras, lenha, chamas animadas, brasas e espada; 3 curas restauradas ao descansar.
-- Criar personagem: teclado interno no jogo, compatível com toque e gamepad; sem caixa prompt do navegador.
-- Seleção visual Guardião / Andarilha, sem bolinhas ou lista dropdown.
-- Saves existentes preservados (mesmo banco IndexedDB).
-- Continua com modo horizontal, analógico, suporte a gamepad e controles R1/R2.
+ATUALIZAÇÃO
+- Efeitos de dano separados para Guardião e Andarilha, recortados dos três vídeos enviados pelo criador.
+- Efeito de morte editado, com ajuste de volume e fade.
+- Volume do jogo controla também os efeitos importados; som pode ser desligado.
+- Versão PRÉ-DEMO 1.1.2 exibida discretamente no canto da tela.
+- Cache offline atualizado para incluir os três arquivos MP3.
+- Mantém saves, controles, personagens e demais funções da Pré-Demo 1.1.
 
-INSTALAR: extraia todos os 10 arquivos na raiz da branch main do repositório Dead-Souls-.
-Substitua os arquivos anteriores e faça Commit changes.
-Abra o jogo na internet para atualizar o cache PWA. Não limpe os dados do site, para preservar saves.
-A tela cheia/horizontal depende das permissões do navegador.
+PUBLICAÇÃO
+Extraia o ZIP; envie os arquivos diretamente à raiz da branch main, incluindo os três .mp3, e faça commit. Abra o jogo online para o PWA atualizar. Não limpe os dados do navegador.
 
-Observação: os sons vocais são aproximações sintetizadas, não gravações naturais; teste o controle físico no aparelho.
+IMPORTANTE SOBRE DIREITOS: os três sons foram extraídos de vídeos enviados pelo usuário que mostram áudios disponíveis em canais de terceiros. A inclusão no ZIP não concede licença de reutilização. Antes de distribuir o jogo publicamente, confirme a autorização/licença dos sons ou substitua-os por efeitos próprios/licenciados. Reproduzir som no Android pode exigir primeiro um toque do jogador.
