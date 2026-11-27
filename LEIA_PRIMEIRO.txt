@@ -1,16 +1,11 @@
-DEAD SOULS · BETA 0.5 · MCE1809
+DEAD SOULS — Beta 0.5.1 Estabilidade · MCE1809
 
-NOVIDADES:
-- Pátio Externo com neve e vento.
-- Salas conectadas: limpe os inimigos e atravesse a passagem norte. Sala 5, 10, 15... são de chefes aleatórios.
-- Fogueiras fixas em salas 1, 4, 6, 9...; aproxime-se, elimine as ameaças e interaja para descansar.
-- EXATAMENTE 3 curas; cada frasco restaura 38 de vida. As três recarregam ao sentar nas fogueiras.
-- Personagem Guardião (masculino, armadura pesada) ou Andarilha (feminino, 10% mais rápida e 10% menos dano) definido ao CRIAR NOVO SAVE.
-- Suporte a gamepad padrão (Gamepad API) com analógico esquerdo / A esquiva / X ataque / Y cura / B interagir / Start pausa. No PC: WASD, J ataque, Shift esquiva, H cura, E interagir.
-- Salva checkpoint de fogueira, preservando a chave de perfis das Betas 0.2–0.4. Um save antigo inicia na sala correspondente à horda salva.
+INCLUI: layout deitado e tela cheia ao iniciar (dependente de permissão do navegador), menus simples, navegação por gamepad, saves em IndexedDB com migração dos perfis antigos, personagem masculino mais rápido, limitação de renderização a ~30 FPS, cenário pré-renderizado, HUD otimizado e botões de toque invisíveis quando não utilizados ou ao conectar gamepad.
 
-ATUALIZAÇÃO GITHUB PAGES: Extraia o ZIP. Envie os arquivos soltinhos para a raiz da branch main (não a pasta e não o ZIP). Atualize o site conectado à internet. Não limpe os dados do navegador. Faça backup dos saves quando disponível.
+ATUALIZAÇÃO: Extraia este ZIP. Envie os arquivos SOLTOS para a RAIZ da branch main no mesmo repositório GitHub Pages. Substitua versões anteriores e aguarde publicação. Abra o jogo conectado à internet ao menos uma vez para atualizar o cache do PWA. NÃO limpe dados do navegador: o IndexedDB importa seus perfis anteriores do localStorage.
 
-NOTA: suporte ao gamepad depende de compatibilidade do navegador e do controle; a orientação horizontal pode precisar de rotação manual.
+A tela cheia e o bloqueio na horizontal não podem ser garantidos permanentemente em navegadores Android: o sistema pode interromper, sair de tela cheia ou impedir o bloqueio. No PWA instalado, display fullscreen + orientation landscape fazem a solicitação inicial. O botão ⛶ permite voltar à tela cheia após um toque.
 
-ATUALIZACAO DOS CONTROLES: R1/RB ataque normal; R2/RT ataque forte lento; A/Cruz interagir; X/Quadrado curar; B/Circulo esquivar. No teclado L = ataque forte. No celular botao FORTE.
+GAMEPAD MENU: D-pad/analógico cima-baixo navega, A/Cruz confirma, B/Bolinha volta; Start pausa. No combate R1 ataca, R2 forte, X/Quadrado cura, A/Cruz interage, B/Bolinha esquiva.
+
+AVISO: alterações estruturais exigem testes em aparelhos reais. Os dados locais podem ser removidos pelo navegador/usuário; faça cópia de seus dados importantes quando houver exportação disponível.
