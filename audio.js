@@ -1,4 +1,4 @@
-// Dead Souls — Pré-Demo 1.1.3: trilhas originais, vozes de dano restauradas e fallback sonoro.
+// Dead Souls — Pré-Demo 1.1.3 Fixed: trilhas originais, vozes de dano restauradas e fallback sonoro.
 (()=>{'use strict';
 const KEY='dead-souls-audio-v04';
 let ctx=null, enabled=true, volume=.55,lastUi=0,lastVocal=0;

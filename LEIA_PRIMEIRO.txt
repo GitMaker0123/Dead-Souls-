@@ -1,24 +1,25 @@
-DEAD SOULS — PRÉ-DEMO 1.1.3 — MCE1809
+DEAD SOULS — PRÉ-DEMO 1.1.3 FIXED — MCE1809
 
-CORREÇÕES E MÚSICA
-- Corrigida a origem do problema das vozes: os MP3s de dano da 1.1.2 estavam silenciosos.
-- Dano masculino e feminino reextraídos dos arquivos enviados pelo criador, com normalização e recorte da parte audível.
-- Ao falhar a reprodução de um som vocal, o jogo usa um efeito sintetizado como reserva.
-- Três trilhas originais instrumentais em OGG, geradas para esta atualização:
-  musica-menu.ogg       — menus, saves, criação de personagem e pausa
-  musica-fogueira.ogg   — quando próximo à fogueira e na tela de descanso
-  musica-chefe.ogg      — durante confrontos com chefes
-- Transições suaves e volume unificado com Configurações > Som.
-- Nenhuma música de terceiros foi utilizada. Os gritos de personagem continuam derivados dos vídeos enviados pelo criador.
-- Indicador PRÉ-DEMO 1.1.3. Os 3 slots de save existentes são preservados.
+ATUALIZAÇÃO DE MÚSICAS (ARQUIVOS FORNECIDOS PELO CRIADOR)
+- musica-menu.ogg: extraída do PRIMEIRO vídeo enviado (1000052393.mp4).
+  Usa somente o começo, com corte antes da troca de música no final.
+- musica-fogueira.ogg: extraída do SEGUNDO vídeo enviado (1000052395.mp4).
+- musica-chefe.ogg: permanece a trilha de chefes da 1.1.3.
+- As duas novas faixas têm pequenas entradas/saídas suavizadas para evitar estalos.
+- Substituem as antigas melodias de notas ascendentes/descendentes nos menus e fogueiras.
+- Versão identificada em tela como PRÉ-DEMO 1.1.3 FIXED.
+- Cache offline renovado para forçar atualização dos áudios.
+- Saves, 3 curas, controles, gráficos, chefes, efeitos de dano e morte mantidos.
 
-ATUALIZAR NO GITHUB
+PUBLICAÇÃO (GITHUB PAGES)
 1. Extraia este ZIP no celular.
-2. No seu repositório Dead-Souls-, branch main, envie os ARQUIVOS diretamente na raiz.
-3. Substitua os arquivos existentes e inclua os três novos musica-*.ogg.
-4. Faça Commit changes.
-5. Abra o site com internet e recarregue. O service worker foi atualizado.
-6. Não limpe os dados do site: os saves ficam no armazenamento do navegador.
+2. Envie todos os arquivos extraídos diretamente à raiz da branch main do Dead-Souls-.
+3. Substitua os arquivos antigos, incluindo os dois musica-*.ogg.
+4. Commit changes. Reabra o site com internet para atualizar o PWA.
+5. NÃO limpe os dados do site, pois isso pode apagar os saves.
 
-OBS.: O navegador pode exigir uma interação do usuário para permitir áudio. A reprodução no Android e a transição entre músicas devem ser testadas no dispositivo físico.
-OBS.: Verifique a licença de uso dos três efeitos vocais fornecidos anteriormente antes de distribuir comercialmente.
+NOTAS
+- As faixas são recortes dos arquivos enviados pelo criador; verifique os direitos
+  e a licença de redistribuição caso publique ou distribua o jogo.
+- O navegador Android pode exigir um toque antes de permitir reprodução de áudio.
+- Os recortes se repetem em loop; faixas completas poderão ser substituídas no futuro.
