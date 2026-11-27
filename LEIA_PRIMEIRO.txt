@@ -1,13 +1,19 @@
-DEAD SOULS — PRÉ-DEMO 1.0 — MCE1809
+DEAD SOULS — PRÉ-DEMO 1.1 — MCE1809
 
-ATUALIZAÇÃO DE ARTE E INTRODUÇÃO
+NOVIDADES
+- Ícone DEAD SOULS original (192 e 512), espada e chamas azuis.
+- Pátio Externo: detalhes de pedra, gelo, ruínas e cenário pré-renderizado.
+- Caminhada: animação com pernas alternadas, oscilação de tronco e passos sintetizados.
+- Dano: grunhido eletrônico curto; morte: grito eletrônico prolongado (não são gravações de voz humana).
+- Fogueira refeita: círculo de pedras, lenha, chamas animadas, brasas e espada; 3 curas restauradas ao descansar.
+- Criar personagem: teclado interno no jogo, compatível com toque e gamepad; sem caixa prompt do navegador.
+- Seleção visual Guardião / Andarilha, sem bolinhas ou lista dropdown.
+- Saves existentes preservados (mesmo banco IndexedDB).
+- Continua com modo horizontal, analógico, suporte a gamepad e controles R1/R2.
 
-• Inimigos com sprites humanoides detalhados, armaduras gastas, torso, pernas, braços, elmos e armas identificáveis (arco, espada, machado, lança).
-• Personagem masculino e feminino redesenhados com armaduras diferentes.
-• Prólogo em 3 telas, com fundos estilizados. Aparece ao iniciar save na sala 1 uma vez por sessão; pode ser pulado.
-• Mantidos saves IndexedDB, três curas, fogueiras, gamepad, sistema de salas, 30 FPS e modo horizontal.
-• Os sprites são ilustrações vetoriais pré-renderizadas, não desenhos 3D ou pixel art final.
+INSTALAR: extraia todos os 10 arquivos na raiz da branch main do repositório Dead-Souls-.
+Substitua os arquivos anteriores e faça Commit changes.
+Abra o jogo na internet para atualizar o cache PWA. Não limpe os dados do site, para preservar saves.
+A tela cheia/horizontal depende das permissões do navegador.
 
-PUBLICAR: extraia os dez arquivos diretamente na raiz da branch main do repositório Dead-Souls-. Substitua os anteriores e inclua actors.js. Confira que index.html, actors.js, game.js, audio.js e sw.js estejam lado a lado. Faça commit; abra o site com internet para atualizar o cache do PWA. Não apague os dados do site, para preservar saves.
-
-Tela cheia depende das permissões do navegador/Android.
+Observação: os sons vocais são aproximações sintetizadas, não gravações naturais; teste o controle físico no aparelho.

@@ -109,12 +109,22 @@ function sprite(kind,variant=''){
  // A imagem é gerada somente uma vez: desempenho melhor em aparelhos modestos.
  CACHE.set(key,cn);return cn;
 }
-function draw(ctx,kind,x,y,r,variant='',flash=false,move=0,face=1){
- const size=Math.max(37,r*3.7),sw=size*.76;
- const art=sprite(kind,variant);
- ctx.save();ctx.translate(x,y-5+Math.sin(move*7)*1.1);ctx.scale(face,1);
+function draw(ctx,kind,x,y,r,variant='',flash=false,move=0,face=1,moving=false,attacking=false){
+ const size=Math.max(37,r*3.7),sw=size*.76,art=sprite(kind,variant),phase=move*9;
+ ctx.save();ctx.translate(x,y-5);ctx.scale(face,1);
  if(flash){ctx.globalAlpha=.82;ctx.filter='brightness(1.8)'}
- ctx.drawImage(art,-sw/2,-size*.70,sw,size);
+ if(moving){
+   // Pernas independentes: passadas alternadas, botas e oscilação do tronco.
+   const stride=Math.sin(phase)*Math.min(8,size*.11);
+   // Cada metade inferior do sprite é deslocada separadamente.
+   ctx.drawImage(art,29,105,35,55,-sw*.28+stride*.6,-size*.70+size*105/160+Math.abs(stride)*.21,sw*35/128,size*55/160);
+   ctx.drawImage(art,64,105,35,55,sw*.01-stride*.6,-size*.70+size*105/160+Math.abs(stride)*.21,sw*35/128,size*55/160);
+   ctx.save();ctx.translate(0,Math.sin(phase*2)*1.2);ctx.rotate(Math.sin(phase)*.035+(attacking?-.09:0));
+   ctx.drawImage(art,0,0,128,109,-sw/2,-size*.70,sw,size*109/160);ctx.restore();
+ }else{
+   ctx.rotate(attacking?-.10:0);
+   ctx.drawImage(art,-sw/2,-size*.70+Math.sin(move*2)*.5,sw,size);
+ }
  ctx.restore();
 }
 window.DeadActors={draw,preload(){for(const k of Object.keys(palettes))sprite(k);}};
