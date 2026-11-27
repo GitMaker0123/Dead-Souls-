@@ -1,0 +1,20 @@
+DEAD SOULS — DEMO 1.0.1 — MCE1809
+
+VISUAL
+- Personagens e inimigos: desgaste de armadura, rebites, fivelas, marcas e silhuetas específicas de classe.
+- Chefes: símbolos de peito e elementos visuais de identificação.
+- Pátio Externo: bandeiras rasgadas, correntes, fendas com gelo e neve acumulada.
+- Fogueiras: runas nas pedras, brasas, línguas de fogo e halo luminoso.
+- Menu: hierarquia visual e destaque do foco do gamepad.
+
+DESEMPENHO
+- Os detalhes fixos continuam sendo criados e reutilizados em canvas fora do loop principal de renderização.
+- A melhoria de 20% é meta qualitativa, não medida objetiva de qualidade.
+
+MANTIDO
+- Pátio Externo, Essência, inventário, sete atributos, baús e mímicos, saves, dois chefes, controles e ausência de áudio.
+
+PUBLICAÇÃO
+- Envie os arquivos EXTRAÍDOS à raiz da branch main do repositório Dead-Souls-.
+- Não limpe os dados do site, para preservar seus saves.
+- Confira no canto: DEMO 1.0.1 · PÁTIO EXTERNO.

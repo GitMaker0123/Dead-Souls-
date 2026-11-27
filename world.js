@@ -1,4 +1,4 @@
-/* Dead Souls Pre-Demo 1.2 — Pátio Externo: cenários pré-renderizados por sala. */
+/* Dead Souls Demo 1.0.1 — Pátio Externo: cenários pré-renderizados por sala. */
 (()=>{'use strict';
 const W=960,H=576,cache=new Map(),CAP=4;
 function hash(a,b){let n=Math.imul(a+19,73856093)^Math.imul(b+67,19349663)^0x4ca71;return n>>>0}
@@ -27,6 +27,36 @@ function generate(rx,depth){const rng=random(hash(rx,depth)),cn=document.createE
  if(depth%4===2){arch(c,744,150,58,74);for(let i=0;i<7;i++)stone(c,730+rng()*115,217+rng()*45,12+rng()*12,rng)}
  if(Math.abs(rx)===2){deadTree(c,743,248,1.05,rng);arch(c,175,160,62,86)}
  if(depth===12||depth===24){for(let i=0;i<5;i++){const x=200+i*130;ellipse(c,x,H*.46,45,15,'#0a1724bf');stone(c,x,H*.46,36,rng)}c.strokeStyle='#9d677575';c.lineWidth=4;c.beginPath();c.arc(W/2,H/2,153,0,Math.PI*2);c.stroke()}
+ // Demo 1.0.1: arquitetura legível, detalhes estáticos pré-renderizados.
+ // Brasões rasgados e correntes antigas nas muralhas.
+ for(const bx of [193,767]){
+  const by=depth%2?67:73;
+  c.fillStyle='#25333e';c.fillRect(bx-17,by-7,34,6);
+  p(c,[[bx-17,by],[bx+16,by],[bx+12,by+47],[bx,by+39],[bx-11,by+47]],'#673d44','#241e2a',2);
+  c.strokeStyle='#c4a47d';c.lineWidth=2;c.beginPath();c.moveTo(bx-9,by+12);c.lineTo(bx+8,by+12);c.moveTo(bx,by+7);c.lineTo(bx,by+31);c.stroke();
+  for(let k=0;k<4;k++){c.strokeStyle='#a2abb27f';c.lineWidth=2;c.beginPath();c.moveTo(bx+24,by-12+k*9);c.lineTo(bx+24,by-5+k*9);c.stroke()}
+ }
+ // Manchas de gelo azuladas em fendas, sem poluir área central de combate.
+ for(let i=0;i<31;i++){
+  const x=53+rng()*854,y=65+rng()*453,sz=5+rng()*15;
+  if(Math.hypot(x-W/2,y-H/2)<145)continue;
+  c.strokeStyle=i%4===0?'#bfe6ee9a':'#74aabd69';c.lineWidth=.9+rng()*1.4;
+  c.beginPath();c.moveTo(x-sz,y+1);c.lineTo(x,y-2);c.lineTo(x+sz*.6,y-5);c.stroke();
+  if(i%3===0){c.beginPath();c.moveTo(x,y-2);c.lineTo(x+sz*.4,y+7);c.stroke()}
+ }
+ // Neve assoprada formando dunas baixas junto aos limites da sala.
+ for(const side of [-1,1]){
+  for(let i=0;i<6;i++){
+   const yy=48+i*91+(rng()-.5)*18,xx=side<0?58+rng()*47:W-58-rng()*47;
+   ellipse(c,xx,yy,21+rng()*27,4+rng()*5,'#d8ebed80',rng()*.18);
+   ellipse(c,xx-7,yy-2,11+rng()*18,2+rng()*4,'#f3f8f5a3');
+  }
+ }
+ // Trilha de passos quase apagados aponta para o portão norte.
+ for(let i=0;i<9;i++){
+   const yy=H-103-i*45,xx=459+(i%2?17:-17)+(rng()-.5)*8;
+   ellipse(c,xx,yy,5,9,'#101e2a38',-.17);ellipse(c,xx+3,yy-2,2,5,'#b5d0d12f',-.17);
+ }
  // Trilha pisada no gelo, levemente iluminada no centro.
  const light=c.createRadialGradient(475,284,20,475,284,395);light.addColorStop(0,'#c4d6dc12');light.addColorStop(1,'#8ca3b000');c.fillStyle=light;c.fillRect(0,0,W,H);
  return cn}
@@ -43,6 +73,23 @@ function bonfire(c,x,y,t,active=false){c.save();c.translate(x,y);const flame=Mat
  c.lineCap='round';for(const [a,b] of [[-1,1],[1,-1]]){c.strokeStyle='#271e1a';c.lineWidth=16;c.beginPath();c.moveTo(-32,15+a*5);c.lineTo(35,17+b*5);c.stroke();c.strokeStyle='#916344';c.lineWidth=4;c.stroke()}
  c.save();c.shadowBlur=32;c.shadowColor='#ec7426';for(let i=0;i<5;i++){let shift=i*10-20;let top=-40-i*4+flame*Math.sin(t*1.3+i);p(c,[[shift-12,15],[shift-7,-5],[shift+5,top],[shift+14,-6],[shift+15,16]],['#aa462c','#d66b2c','#f1a541','#ffcf79','#fbe5a5'][i]);}c.restore();
  c.strokeStyle='#9caab3';c.lineWidth=8;c.beginPath();c.moveTo(3,-3);c.lineTo(1,-84);c.stroke();p(c,[[-7,-80],[2,-104],[10,-79],[2,-70]],'#bcc9cc','#586978',2);c.strokeStyle='#a68155';c.lineWidth=8;c.beginPath();c.moveTo(-17,-32);c.lineTo(19,-33);c.stroke();ellipse(c,1,-33,5,5,'#e5bc79');
+ // Pedra gravada, brasas em três camadas e luz que pulsa nas lajes.
+ for(let i=0;i<6;i++){
+  const angle=i*Math.PI/3,px=Math.cos(angle)*57,py=9+Math.sin(angle)*19;
+  c.strokeStyle='#c0c7c2b4';c.lineWidth=1.3;c.beginPath();c.moveTo(px-4,py-1);c.lineTo(px,py-4);c.lineTo(px+4,py-1);c.stroke();
+ }
+ for(let i=0;i<18;i++){
+  const a=i*2.399,rad=9+(i%5)*6;
+  ellipse(c,Math.cos(a)*rad,14+Math.sin(a)*rad*.29,1.4+i%3,1.2,'#ffb35b');
+ }
+ const halo=c.createRadialGradient(0,-4,8,0,0,86);
+ halo.addColorStop(0,'#ffe7a631');halo.addColorStop(.43,'#e9863d20');halo.addColorStop(1,'#df884800');
+ c.fillStyle=halo;c.beginPath();c.ellipse(0,0,88,58,0,0,Math.PI*2);c.fill();
+ // Cinzas em torno da espada e três línguas adicionais de fogo.
+ for(let i=0;i<3;i++){
+  const dx=-16+i*16,fl=Math.sin(t*9+i*2)*5;
+  p(c,[[dx-6,8],[dx-4,-9],[dx+fl*.4,-27-fl],[dx+8,-1],[dx+4,9]],i===1?'#fff0b7c2':'#f9a44fa0',null);
+ }
  for(let i=0;i<11;i++){let phase=(t*30+i*19)%88;c.globalAlpha=(1-phase/88)*.9;ellipse(c,Math.sin(t*.9+i*9)*28,6-phase,1.3+i%3,.9+i%2,i%2?'#fce4ac':'#fa9348')}c.globalAlpha=1;
  if(active){c.strokeStyle='#f2d29688';c.lineWidth=2;c.beginPath();c.ellipse(0,5,78,35,0,0,Math.PI*2);c.stroke()}c.restore()}
 window.DeadWorld={drawBackground,drawPassages,bonfire,roomCacheSize:()=>cache.size};

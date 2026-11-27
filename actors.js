@@ -1,4 +1,4 @@
-/* Dead Souls Pre-Demo 1.0: personagens desenhados e armazenados como sprites 2D. */
+/* Dead Souls Demo 1.0.1: personagens desenhados e armazenados como sprites 2D. */
 (()=>{'use strict';
 const CACHE=new Map(), palettes={
   wanderer:['#514d56','#8f8784','#362e39','#b49b80'],
@@ -144,6 +144,48 @@ function sprite(kind,variant=''){
   line([[-31,-15],[-20,-19]],'#d5e3e9',2);
  }
 
+ // Demo 1.0.1: acabamento de materiais pré-renderizado, sem custo por quadro.
+ // Metais lascados: riscos em diagonal, rebites e reflexos diferentes para cada tipo.
+ for(let i=0;i<12;i++){
+  const xx=-19+((i*13+7)%39), yy=-24+((i*19+11)%48);
+  c.strokeStyle=i%3===0?'#e8e2cfb3':i%3===1?'#141a28bb':'#976b55ad';
+  c.lineWidth=i%4===0?1.9:.85;c.beginPath();c.moveTo(xx,yy);c.lineTo(xx+4+(i%3),yy-2-(i%4));c.stroke();
+ }
+ // Cintos, tiras e fivelas; contraste maior entre tecido, metal e pele.
+ c.strokeStyle='#201d22';c.lineWidth=3.8;c.beginPath();c.moveTo(-13,16);c.lineTo(13,16);c.stroke();
+ c.strokeStyle='#bca47a';c.lineWidth=1.1;c.beginPath();c.moveTo(-13,14);c.lineTo(13,14);c.stroke();
+ c.fillStyle='#d9c7a1';c.fillRect(-3,12,6,6);c.fillStyle='#383a43';c.fillRect(-1.5,13.5,3,3);
+ // Marcações próprias para identificar inimigos por classe.
+ if(archer){
+  c.fillStyle='#8d6c49';c.fillRect(-30,-29,6,29);c.fillStyle='#c9ad72';
+  for(let k=0;k<4;k++){c.beginPath();c.moveTo(-27,-31+k*3);c.lineTo(-35,-37+k*3);c.lineTo(-30,-29+k*3);c.fill()}
+ }else if(spearman){
+  c.strokeStyle='#c6d5dd';c.lineWidth=2;c.beginPath();c.moveTo(-11,-15);c.lineTo(0,-9);c.lineTo(10,-15);c.stroke();
+  c.strokeStyle='#3c505f';c.lineWidth=3;c.beginPath();c.moveTo(0,-9);c.lineTo(0,8);c.stroke();
+ }else if(axe){
+  c.fillStyle='#59433e';c.fillRect(-18,-10,6,23);c.fillStyle='#bba79a';
+  for(let k=0;k<3;k++)c.fillRect(-18,-7+k*8,6,2);
+ }else if(kind==='runner'){
+  c.strokeStyle='#d6ad8b';c.lineWidth=3;c.beginPath();c.moveTo(-13,-29);c.lineTo(-8,-12);c.lineTo(9,4);c.stroke();
+ }
+ if(isBoss){
+  // Brasão central e placas cerimoniais individualizados por chefe.
+  const crest=variant==='corrupted'?'#a77bdf':variant==='executioner'?'#d4a17d':'#d3b57c';
+  c.fillStyle='#1a2534';c.beginPath();c.moveTo(0,-22);c.lineTo(8,-12);c.lineTo(0,3);c.lineTo(-8,-12);c.closePath();c.fill();
+  c.strokeStyle=crest;c.lineWidth=2.8;c.stroke();
+  c.fillStyle=crest;c.beginPath();c.arc(0,-12,2.8,0,Math.PI*2);c.fill();
+  c.strokeStyle='#d2c1aa9c';c.lineWidth=2;c.beginPath();c.moveTo(-22,-22);c.lineTo(-29,-33);c.moveTo(22,-22);c.lineTo(29,-33);c.stroke();
+ }
+ if(kind==='female'){
+   // Armadura leve com sobreposição de couro e capa assimétrica.
+   poly([[-19,-24],[-24,-11],[-26,13],[-14,25],[-11,5]],'#786d91','#b1a2c2',1);
+   line([[-12,-22],[-18,-3]],'#d9cee4',1.6);
+ }
+ if(kind==='male'){
+   // Guarda robusto: reforço peitoral, rebites e borda de gola.
+   line([[-14,-23],[0,-30],[14,-23]],'#cfdae0',2.5);
+   ellipse(-11,-14,2.4,2.4,'#d8c39c');ellipse(11,-14,2.4,2.4,'#d8c39c');
+ }
  // A imagem é gerada somente uma vez: desempenho melhor em aparelhos modestos.
  CACHE.set(key,cn);return cn;
 }
