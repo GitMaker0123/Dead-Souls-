@@ -1,11 +1,13 @@
-DEAD SOULS — Beta 0.5.1 Estabilidade · MCE1809
+DEAD SOULS — PRÉ-DEMO 1.0 — MCE1809
 
-INCLUI: layout deitado e tela cheia ao iniciar (dependente de permissão do navegador), menus simples, navegação por gamepad, saves em IndexedDB com migração dos perfis antigos, personagem masculino mais rápido, limitação de renderização a ~30 FPS, cenário pré-renderizado, HUD otimizado e botões de toque invisíveis quando não utilizados ou ao conectar gamepad.
+ATUALIZAÇÃO DE ARTE E INTRODUÇÃO
 
-ATUALIZAÇÃO: Extraia este ZIP. Envie os arquivos SOLTOS para a RAIZ da branch main no mesmo repositório GitHub Pages. Substitua versões anteriores e aguarde publicação. Abra o jogo conectado à internet ao menos uma vez para atualizar o cache do PWA. NÃO limpe dados do navegador: o IndexedDB importa seus perfis anteriores do localStorage.
+• Inimigos com sprites humanoides detalhados, armaduras gastas, torso, pernas, braços, elmos e armas identificáveis (arco, espada, machado, lança).
+• Personagem masculino e feminino redesenhados com armaduras diferentes.
+• Prólogo em 3 telas, com fundos estilizados. Aparece ao iniciar save na sala 1 uma vez por sessão; pode ser pulado.
+• Mantidos saves IndexedDB, três curas, fogueiras, gamepad, sistema de salas, 30 FPS e modo horizontal.
+• Os sprites são ilustrações vetoriais pré-renderizadas, não desenhos 3D ou pixel art final.
 
-A tela cheia e o bloqueio na horizontal não podem ser garantidos permanentemente em navegadores Android: o sistema pode interromper, sair de tela cheia ou impedir o bloqueio. No PWA instalado, display fullscreen + orientation landscape fazem a solicitação inicial. O botão ⛶ permite voltar à tela cheia após um toque.
+PUBLICAR: extraia os dez arquivos diretamente na raiz da branch main do repositório Dead-Souls-. Substitua os anteriores e inclua actors.js. Confira que index.html, actors.js, game.js, audio.js e sw.js estejam lado a lado. Faça commit; abra o site com internet para atualizar o cache do PWA. Não apague os dados do site, para preservar saves.
 
-GAMEPAD MENU: D-pad/analógico cima-baixo navega, A/Cruz confirma, B/Bolinha volta; Start pausa. No combate R1 ataca, R2 forte, X/Quadrado cura, A/Cruz interage, B/Bolinha esquiva.
-
-AVISO: alterações estruturais exigem testes em aparelhos reais. Os dados locais podem ser removidos pelo navegador/usuário; faça cópia de seus dados importantes quando houver exportação disponível.
+Tela cheia depende das permissões do navegador/Android.

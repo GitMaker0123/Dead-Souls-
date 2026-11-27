@@ -31,3 +31,13 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 .bossBanner{position:absolute;top:16%;left:50%;transform:translateX(-50%);z-index:4;background:#100e1fda;border-top:1px solid #bb9a75;border-bottom:1px solid #bb9a75;color:#f5e0ca;text-align:center;padding:8px 15px;font:bold 17px Georgia;width:min(85%,500px)}
 @media(max-height:380px){.hud{height:31px}.tally.extra{display:none}.menuPage h2{font-size:clamp(19px,8vh,30px)}.menuPage{gap:3px}.menuPage button{min-height:28px}.actions button{height:42px;width:42px}.joystick{height:78px;width:78px}}
 @media(orientation:portrait){body::before{content:'GIRE O CELULAR PARA JOGAR DEITADO';position:absolute;z-index:12;top:0;left:0;right:0;text-align:center;background:#152840d9;color:#fff;font-size:12px;padding:8px;pointer-events:none}.stage{height:min(100dvh,60vw)}}
+
+/* Prólogo ilustrado em três cenas, sem telas carregadas de texto pequeno. */
+#message:has(.introPage:not([hidden])){background:radial-gradient(ellipse at 55% 100%,#573f3aee,transparent 48%),linear-gradient(145deg,#0b1420ed,#121b2bea);}
+.introPage{width:min(720px,91%);min-height:88%;justify-content:end;padding:20px 25px;position:relative;isolation:isolate;text-shadow:0 2px 10px #000}
+.introPage::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.55;background:linear-gradient(transparent 10%,#080d1a 85%),repeating-linear-gradient(90deg,transparent 0 40px,#738ca42b 42px 45px,transparent 47px 79px),radial-gradient(circle at 50% 35%,#cead7c 0 10%,transparent 12%),linear-gradient(#19283b,#5f4655 60%,#121727);border:1px solid #9a846459;border-radius:6px;}
+.introPage[data-scene="2"]::before{background:linear-gradient(transparent,#080d1a 90%),radial-gradient(circle at 50% 30%,#da493b88 0 13%,transparent 35%),repeating-linear-gradient(110deg,#231d2d 0 24px,#542d3788 25px 29px,#1d2333 32px 64px)}
+.introPage[data-scene="3"]::before{background:linear-gradient(transparent,#080d1a 90%),radial-gradient(circle at 50% 55%,#e4ae64c9 0 5%,transparent 23%),repeating-linear-gradient(90deg,#1c2635 0 31px,#3b485b66 32px 42px,#1d2531 44px 72px)}
+.introPage h2{font-size:clamp(19px,5vh,36px)}
+.introPage p.introText{font:clamp(11px,2.5vh,17px)/1.5 Georgia,serif;color:#f3e5ce;max-width:650px;margin:12px auto;}
+.introPage button{width:min(360px,100%);margin:0 auto}
