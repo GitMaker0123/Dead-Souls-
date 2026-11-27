@@ -40,3 +40,17 @@ header h1{font-family:Georgia,serif;text-shadow:0 5px 20px #0009}header h1 em{co
 .panel h2{color:#e7c394;font-family:Georgia,serif}.panel .menuSound button{background:#2e4052;border:1px solid #718297;border-radius:8px;color:#f1e1ca}
 .actions .attack{background:radial-gradient(circle at 30% 30%,#ad6573,#6a3045);border-color:#eda7ad}.actions .dash{background:radial-gradient(circle at 30% 30%,#658ba5,#314b6f);border-color:#a2c8d7}
 @media (orientation:landscape) and (max-height:650px){.menuPage{gap:5px;padding:4px 7px}.menuPage:before{font-size:13px;line-height:.8}.menuPage button{min-height:28px}.menuSound{padding:2px 4px;gap:5px}.menuSound button{min-height:27px!important;padding:3px 6px!important}.menuSound label{font-size:9px}.menuPage h2{font-size:clamp(19px,4.5vh,29px)}.message{backdrop-filter:none}}
+
+/* Beta 0.5 — três curas, interação no cenário e controles em paisagem */
+.genderPicker{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;text-align:left;font-size:11px;color:#ebd5af;letter-spacing:.5px}
+.genderPicker select{min-width:0;width:100%;background:#1b2c3b;color:#f1e7dc;border:1px solid #947a5f;border-radius:8px;padding:9px;font-size:12px}
+.actions{flex-wrap:wrap;justify-content:flex-end;max-width:235px}
+.actions .heal{background:radial-gradient(circle at 30% 30%,#ab8158,#674a38);border-color:#f1c38f}
+.actions .interact{background:radial-gradient(circle at 30% 30%,#72937b,#36564b);border-color:#b5dfbf}
+.actions .heal,.actions .interact{font-size:10px}
+@media (orientation:landscape) and (max-height:650px){
+ .actions{max-width:160px;display:grid;grid-template-columns:1fr 1fr;gap:3px}
+ .actions button{height:49px!important;width:71px!important;border-radius:12px;font-size:9px!important;opacity:.89}
+ .touch{align-items:flex-end}.joystick{width:92px;height:92px}
+ .genderPicker select{padding:5px}.genderPicker{font-size:10px}
+}

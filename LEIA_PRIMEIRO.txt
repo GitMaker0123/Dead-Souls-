@@ -1,10 +1,16 @@
-DEAD SOULS — MCE1809 — BETA 0.4
-==================================
-Novidades: nove chefes com padrões de ataque diferenciados (golpes em área, leques, rajadas circulares, combos, investidas), Web Audio sintetizado (ataque, esquiva, dano, morte, menu, chefes, fogueira) com controle de volume e botão liga/desliga. Menus reformulados, modo horizontal e saves da beta 0.2/0.3 preservados.
+DEAD SOULS · BETA 0.5 · MCE1809
 
-PUBLICAÇÃO NO GITHUB PAGES:
-Extraia o ZIP. Substitua na raiz do repositório TODOS os arquivos, inclusive audio.js e sw.js. O arquivo index.html precisa ficar na raiz. Faça commit. Entre no site conectado à internet e recarregue para instalar o cache novo.
+NOVIDADES:
+- Pátio Externo com neve e vento.
+- Salas conectadas: limpe os inimigos e atravesse a passagem norte. Sala 5, 10, 15... são de chefes aleatórios.
+- Fogueiras fixas em salas 1, 4, 6, 9...; aproxime-se, elimine as ameaças e interaja para descansar.
+- EXATAMENTE 3 curas; cada frasco restaura 38 de vida. As três recarregam ao sentar nas fogueiras.
+- Personagem Guardião (masculino, armadura pesada) ou Andarilha (feminino, 10% mais rápida e 10% menos dano) definido ao CRIAR NOVO SAVE.
+- Suporte a gamepad padrão (Gamepad API) com analógico esquerdo / A esquiva / X ataque / Y cura / B interagir / Start pausa. No PC: WASD, J ataque, Shift esquiva, H cura, E interagir.
+- Salva checkpoint de fogueira, preservando a chave de perfis das Betas 0.2–0.4. Um save antigo inicia na sala correspondente à horda salva.
 
-Android: som precisa de um toque inicial para habilitar áudio (limitação do navegador). Funciona offline após cache completo; primeira visita precisa de internet.
+ATUALIZAÇÃO GITHUB PAGES: Extraia o ZIP. Envie os arquivos soltinhos para a raiz da branch main (não a pasta e não o ZIP). Atualize o site conectado à internet. Não limpe os dados do navegador. Faça backup dos saves quando disponível.
 
-Atenção: progresso salvo localmente no navegador; NÃO limpar dados do site. Contém conteúdo original de jogo; os nomes dos chefes são ideias de protótipo.
+NOTA: suporte ao gamepad depende de compatibilidade do navegador e do controle; a orientação horizontal pode precisar de rotação manual.
+
+ATUALIZACAO DOS CONTROLES: R1/RB ataque normal; R2/RT ataque forte lento; A/Cruz interagir; X/Quadrado curar; B/Circulo esquivar. No teclado L = ataque forte. No celular botao FORTE.
