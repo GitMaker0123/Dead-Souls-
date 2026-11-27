@@ -1,7 +1,8 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),canvas=$('screen'),ctx=canvas.getContext('2d'),W=960,H=576;
-const SFX=(name)=>window.DeadAudio?.play(name);
-const setMusic=(name)=>window.DeadAudio?.setScene(name);
+// Pré-Demo 1.2 deliberadamente SEM áudio. O pack externo será adicionado depois.
+const SFX=()=>{};
+const setMusic=()=>{};
 const keys=new Set();const stick={x:0,y:0,pointer:null},touchAttack={held:false};
 const SAVEKEY='dead-souls-mce1809-beta02-profiles';let profiles=loadProfiles(),slot=null,player=null,enemies=[],particles=[],state='home',wave=1,kills=0,clock=0,last=0,shake=0,attackHeld=false,notice='',projectiles=[],decor=[],bossTitleTime=0,arenaTime=0;
 const BOSSES=[
@@ -16,17 +17,52 @@ const BOSSES=[
 {name:'Andarilho do Abismo, Artorias',kind:'abyss',hp:680,speed:112,dmg:25,color:'#7c91d4'}
 ];
 let previousBoss=-1;
-// Beta 0.5: salas encadeadas, fogueiras físicas, frascos e controle.
-let checkpointRoom=1, roomCleared=false, bonfire=null, doorOpen=false, snow=[], gamepadDirection={x:0,y:0}, lastPadButtons=[], padAttackHeld=false, healingAnim=0, roomToast=0;
-const HEALS_MAX=3, HEAL_AMOUNT=38;let footstepClock=0;
-function roomHasBonfire(n){return n===1||n%5===4||n%5===1}
-function roomName(){return 'PÁTIO EXTERNO · SALA '+wave+(wave%5===0?' · CHEFE':'')}
-function setBonfire(){bonfire=roomHasBonfire(wave)?{x:174,y:296}:null}
-function nearFire(){return bonfire&&player&&Math.hypot(player.x-bonfire.x,player.y-bonfire.y)<85}
-function restAtFire(){if(state!=='playing'||!nearFire()||enemies.length>0)return;player.hp=player.maxHp;player.stamina=player.maxStamina;player.flasks=HEALS_MAX;checkpointRoom=wave;saveCheckpoint();SFX('checkpoint');$('restHint').textContent='Vida, vigor e 3 frascos restaurados. Progresso salvo na Sala '+wave+'.';$('restDesc').textContent='O fogo antigo protege a sua jornada. Sala '+wave+'.';refreshHUD();setPage('rest')}
-function interact(){if(state!=='playing')return;if(nearFire()){if(enemies.length===0)restAtFire();else{notice='Elimine os inimigos antes de descansar';roomToast=2.5}}else if(doorOpen&&player.y<105&&Math.abs(player.x-W/2)<115){nextRoom()}else{notice='Aproxime-se de uma fogueira ou passagem';roomToast=2}}
-function heal(){if(state!=='playing'||player.flasks<=0||player.hp>=player.maxHp||player.dashTime>0||player.healCD>0)return;player.flasks--;player.hp=Math.min(player.maxHp,player.hp+HEAL_AMOUNT);player.healCD=1;healingAnim=.45;player.invuln=Math.max(player.invuln,.15);SFX('checkpoint');spark(player.x,player.y,'#dca36b',18);refreshHUD()}
-function nextRoom(){if(!doorOpen||state!=='playing')return;wave++;saveCheckpoint(false);enterRoom();}
+// Pré-Demo 1.2: área com salas ligadas por corredores norte/sul/leste/oeste.
+let checkpointRoom=1,roomX=0,roomDepth=0,checkpointX=0,checkpointDepth=0;
+let roomCleared=false,bonfire=null,doorOpen=false,snow=[],gamepadDirection={x:0,y:0},lastPadButtons=[],padAttackHeld=false,healingAnim=0,roomToast=0;
+let clearedRooms=new Set(),defeatedBosses=new Set(),visitedRooms=new Set(),restPose=0;
+const HEALS_MAX=3,HEAL_AMOUNT=38,MAX_DEPTH=24,LEFT_BRANCHES=new Set([2,5,8,11,14,17,20,23]),RIGHT_BRANCHES=new Set([3,6,9,12,15,18,21,23]);
+const FIRE_DEPTHS=new Set([0,8,16,22]);let footstepClock=0;
+function roomKey(x=roomX,d=roomDepth){return `${x}:${d}`}
+function roomExists(x,d){if(d<0||d>MAX_DEPTH||Math.abs(x)>2)return false;
+ if(x===0)return true;
+ if(x===-1)return LEFT_BRANCHES.has(d);
+ if(x===1)return RIGHT_BRANCHES.has(d);
+ if(x===-2)return d===8||d===17;
+ return d===12||d===21;
+}
+function roomDoors(){return{north:roomX===0&&roomExists(roomX,roomDepth+1),south:roomX===0&&roomExists(roomX,roomDepth-1),west:roomExists(roomX-1,roomDepth),east:roomExists(roomX+1,roomDepth)}}
+function roomHasBonfire(){return roomX===0&&FIRE_DEPTHS.has(roomDepth)}
+function roomName(){const wing=roomX<0?'ALA OESTE':roomX>0?'ALA LESTE':'CAMINHO PRINCIPAL';const special=roomX===0&&roomDepth===12?' · CAVALEIRO CORROMPIDO':roomX===0&&roomDepth===24?' · EXECUTOR DO PALÁCIO':'';return `PÁTIO EXTERNO · ${wing} · SALA ${roomDepth+1}${special}`}
+function setBonfire(){bonfire=roomHasBonfire()?{x:174,y:296}:null}
+function nearFire(){return !!(bonfire&&player&&Math.hypot(player.x-bonfire.x,player.y-bonfire.y)<92)}
+function restAtFire(){if(state!=='playing'||!nearFire()||enemies.length>0)return;
+ player.hp=player.maxHp;player.stamina=player.maxStamina;player.flasks=HEALS_MAX;
+ checkpointX=roomX;checkpointDepth=roomDepth;checkpointRoom=roomDepth+1;
+ // Após sentar, inimigos comuns de salas antes limpas voltarão ao próximo acesso.
+ clearedRooms=new Set([...defeatedBosses]);for(const depth of FIRE_DEPTHS)clearedRooms.add(roomKey(0,depth));
+ roomCleared=true;doorOpen=true;restPose=.9;
+ const saved=saveCheckpoint();notice=saved?'FOGUEIRA ACESA · VIDA, VIGOR E 3 CURAS RESTAURADOS · INIMIGOS RETORNARAM':'FOGUEIRA ACESA · NÃO FOI POSSÍVEL SALVAR';roomToast=4.5;
+ spark(bonfire.x,bonfire.y,'#f7b66d',22);refreshHUD(true);
+}
+function heal(){if(state!=='playing'||player.flasks<=0||player.hp>=player.maxHp||player.dashTime>0||player.healCD>0)return;
+ player.flasks--;player.hp=Math.min(player.maxHp,player.hp+HEAL_AMOUNT);player.healCD=1;healingAnim=.45;player.invuln=Math.max(player.invuln,.15);
+ spark(player.x,player.y,'#dca36b',15);refreshHUD(true);
+}
+function interact(){if(state!=='playing'||restPose>0)return;
+ if(nearFire()){restAtFire();return}
+ if(roomCleared){const d=roomDoors();const p=player;
+ if(d.north&&p.y<113&&Math.abs(p.x-W/2)<125){travel(0,1);return}
+ if(d.south&&p.y>H-113&&Math.abs(p.x-W/2)<125){travel(0,-1);return}
+ if(d.west&&p.x<115&&Math.abs(p.y-H/2)<130){travel(-1,0);return}
+ if(d.east&&p.x>W-115&&Math.abs(p.y-H/2)<130){travel(1,0);return}
+ }
+ notice=roomCleared?'Aproxime-se de uma passagem iluminada':'Elimine os inimigos para liberar as saídas';roomToast=2.5;
+}
+function travel(dx,dy){if(!roomCleared||!roomExists(roomX+dx,roomDepth+dy)||state!=='playing')return false;
+ roomX+=dx;roomDepth+=dy;wave=roomDepth+1;
+ enterRoom(dx===1?'west':dx===-1?'east':dy===1?'south':'north');return true;
+}
 let gamepadActive=false,padMenuRepeat=0,padLastAxis=0;
 function menuFocusables(){const page=document.querySelector('.menuPage:not([hidden])');return page?[...page.querySelectorAll('button:not(:disabled),select,input[type="range"]')].filter(el=>el.getClientRects().length):[]}
 function stepMenu(n){const els=menuFocusables();if(!els.length)return;const idx=els.indexOf(document.activeElement);const next=els[(idx+n+els.length)%els.length];els.forEach(e=>e.classList.remove('pad-selected'));next.classList.add('pad-selected');next.focus({preventScroll:true})}
@@ -79,22 +115,38 @@ async function initDatabase(){database=await openDatabase();if(database){await n
 
 function fmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function setPage(page){state=page;menuDrawn=false;setMusic(page==='playing'?(enemies.some(e=>e.type==='boss')?'boss':(nearFire()?'bonfire':'silence')):page==='rest'?'bonfire':page==='dead'?'silence':'menu');const map={home:'menuHome',saves:'menuSaves',rest:'menuRest',dead:'menuDeath',paused:'menuPause',exit:'menuExit',settings:'menuSettings',intro:'menuIntro',create:'menuCreate'};for(const el of document.querySelectorAll('.menuPage'))el.hidden=el.id!==map[page];$('message').hidden=page==='playing';$('statusText').textContent=({home:'Menu inicial',saves:'Escolher save',rest:'Ponto de descanso',playing:'Em combate',dead:'Você Não Resistiu',paused:'Pausado',exit:'Menu de saída'})[page]||page;keys.clear();touchAttack.held=false;releaseStick();$('touchControls').hidden=page!=='playing'||gamepadActive;$('pauseBtn').hidden=page!=='playing';requestAnimationFrame(()=>{const first=document.querySelector('.menuPage:not([hidden]) button:not(:disabled)');if(first)first.focus({preventScroll:true})})}
-let lastHudAt=0;function refreshHUD(force=false){if(!player)return;const now=performance.now();if(!force&&now-lastHudAt<180)return;lastHudAt=now;$('lifeBar').style.width=clamp(player.hp/player.maxHp*100,0,100)+'%';$('energyBar').style.width=clamp(player.stamina/player.maxStamina*100,0,100)+'%';$('lifeText').textContent=`${Math.ceil(player.hp)} / ${player.maxHp}`;$('energyText').textContent=`${Math.floor(player.stamina)} / ${player.maxStamina}`;$('wave').textContent=wave;$('flasksText').textContent=(player.flasks??3)+' / 3';$('kills').textContent=kills;$('timer').textContent=fmt(clock);$('activeProfile').textContent=profiles[slot]?.name||'Nenhum';}
+let lastHudAt=0;function refreshHUD(force=false){if(!player)return;const now=performance.now();if(!force&&now-lastHudAt<180)return;lastHudAt=now;$('lifeBar').style.width=clamp(player.hp/player.maxHp*100,0,100)+'%';$('energyBar').style.width=clamp(player.stamina/player.maxStamina*100,0,100)+'%';$('lifeText').textContent=`${Math.ceil(player.hp)} / ${player.maxHp}`;$('energyText').textContent=`${Math.floor(player.stamina)} / ${player.maxStamina}`;$('wave').textContent=String(roomDepth+1)+(roomX<0?' O'+Math.abs(roomX):roomX>0?' L'+roomX:'');$('flasksText').textContent=(player.flasks??3)+' / 3';$('kills').textContent=kills;$('timer').textContent=fmt(clock);$('activeProfile').textContent=profiles[slot]?.name||'Nenhum';}
 function makePlayer(){return{x:W/2,y:H/2,r:18,hp:100,maxHp:100,flasks:HEALS_MAX,healCD:0,gender:profiles[slot]?.gender||'masculino',stamina:120,maxStamina:120,dx:0,dy:1,attackCD:0,attackTimer:0,heavyWindup:0,heavyStrike:0,dashCD:0,dashTime:0,invuln:0,dashX:0,dashY:0,flash:0}}
 function menuHome(){slot=null;setPage('home');refreshHUD()}
-function selectProfile(i){slot=i;const d=profiles[i];if(!d)return;wave=d.checkpointRoom||d.wave||1;checkpointRoom=wave;kills=d.kills||0;clock=d.clock||0;player=makePlayer();enemies=[];particles=[];projectiles=[];
- if(wave===1&&!sessionStorage.getItem('dead-souls-intro-viewed')){introPage=0;renderIntro();setPage('intro')}else enterRoom();}
-function profileList(){$('saveList').replaceChildren();profiles.forEach((p,i)=>{let el=document.createElement('div');el.className='saveSlot';let open=document.createElement('button');open.className='slotOpen';open.textContent=`${p.name} · Sala ${p.checkpointRoom||p.wave||1} · ${p.gender==='feminino'?'Ágil':'Guardião'}`;open.onclick=()=>selectProfile(i);let del=document.createElement('button');del.className='slotDelete';del.textContent='Excluir';del.onclick=()=>{if(confirm(`Excluir o save de ${p.name}?`)){profiles.splice(i,1);persist();profileList()}};el.append(open,del);$('saveList').append(el)});$('createSave').disabled=profiles.length>=3}
-function saveCheckpoint(atFire=true){if(slot===null||!profiles[slot])return false;profiles[slot].wave=atFire?wave:checkpointRoom;profiles[slot].checkpointRoom=checkpointRoom;profiles[slot].kills=kills;profiles[slot].clock=clock;profiles[slot].updated=new Date().toISOString();return persist()}
-function prepareRest(){// Compatibilidade com saves antigos; o descanso agora é interação física.
- enemies=[];particles=[];projectiles=[];bossTitleTime=0;roomCleared=true;doorOpen=true;setBonfire();player.x=bonfire?bonfire.x+45:W/2;player.y=bonfire?bonfire.y:H*.7;player.stamina=player.maxStamina;player.hp=player.maxHp;player.flasks=HEALS_MAX;checkpointRoom=wave;saveCheckpoint();refreshHUD();setPage('playing');}
-function pickBoss(){let i=Math.floor(Math.random()*BOSSES.length);if(i===previousBoss)i=(i+1+Math.floor(Math.random()*(BOSSES.length-1)))%BOSSES.length;previousBoss=i;const base=BOSSES[i],scale=1+Math.max(0,Math.floor(wave/5)-1)*.21;return {...base,name:base.name,type:'boss',x:W/2,y:118,r:28,hp:Math.round(base.hp*scale),maxHp:Math.round(base.hp*scale),speed:base.speed*(1+Math.min(.26,(wave/5-1)*.025)),attackCD:1.25,flash:0,windup:0,hit:false,phase:0,telegraph:null,pattern:0,strafe:1,comboLeft:0,spin:.3};}
-function enterRoom(){player.x=W/2;player.y=H*.75;player.invuln=.85;player.dashCD=0;enemies=[];particles=[];projectiles=[];bossTitleTime=0;roomCleared=false;doorOpen=false;arenaTime=0;setBonfire();
- if(wave===1){roomCleared=true;doorOpen=true;notice='Aproxime-se da fogueira e toque em INTERAGIR';roomToast=5;}
- else if(wave%5===0){const boss=pickBoss();enemies.push(boss);bossTitleTime=3.2;$('bossBanner').textContent=boss.name;$('bossBanner').hidden=false;SFX('boss');}
- else {for(let i=0;i<Math.min(2+Math.floor(wave/2),8);i++)spawnEnemy();$('bossBanner').hidden=true;}
- if(wave!==1)$('bossBanner').hidden=wave%5!==0;
- refreshHUD();setPage('playing');}
+function selectProfile(i){slot=i;const d=profiles[i];if(!d)return;
+ checkpointDepth=Number.isInteger(d.checkpointDepth)?Math.min(MAX_DEPTH,Math.max(0,d.checkpointDepth)):Math.min(MAX_DEPTH,Math.max(0,(d.checkpointRoom||d.wave||1)-1));
+ checkpointX=Number.isInteger(d.checkpointX)&&roomExists(d.checkpointX,checkpointDepth)?d.checkpointX:0;
+ roomDepth=checkpointDepth;roomX=checkpointX;wave=roomDepth+1;checkpointRoom=wave;
+ kills=d.kills||0;clock=d.clock||0;defeatedBosses=new Set(Array.isArray(d.defeatedBosses)?d.defeatedBosses:[]);
+ clearedRooms=new Set([...defeatedBosses]);for(const depth of FIRE_DEPTHS)clearedRooms.add(roomKey(0,depth));
+ visitedRooms=new Set();player=makePlayer();enemies=[];particles=[];projectiles=[];
+ if(roomDepth===0&&!sessionStorage.getItem('dead-souls-intro-viewed')){introPage=0;renderIntro();setPage('intro')}else enterRoom();}
+function profileList(){$('saveList').replaceChildren();profiles.forEach((p,i)=>{let el=document.createElement('div');el.className='saveSlot';let open=document.createElement('button');open.className='slotOpen';open.textContent=`${p.name} · Sala ${p.checkpointRoom||p.wave||1}${p.checkpointX?(' / '+(p.checkpointX<0?'Oeste':'Leste')):''} · ${p.gender==='feminino'?'Andarilha':'Guardião'}`;open.onclick=()=>selectProfile(i);let del=document.createElement('button');del.className='slotDelete';del.textContent='Excluir';del.onclick=()=>{if(confirm(`Excluir o save de ${p.name}?`)){profiles.splice(i,1);persist();profileList()}};el.append(open,del);$('saveList').append(el)});$('createSave').disabled=profiles.length>=3}
+function saveCheckpoint(){if(slot===null||!profiles[slot])return false;
+ const d=profiles[slot];d.wave=checkpointDepth+1;d.checkpointRoom=checkpointDepth+1;d.checkpointDepth=checkpointDepth;d.checkpointX=checkpointX;
+ d.defeatedBosses=[...defeatedBosses];d.kills=kills;d.clock=clock;d.updated=new Date().toISOString();return persist();}
+
+function prepareRest(){// Compatibilidade com chamadas antigas; não mostra menu de descanso.
+ if(bonfire&&nearFire())restAtFire();else setPage('playing');}
+function pickBoss(){const which=roomDepth===MAX_DEPTH?'executioner':'corrupted';
+ const base=BOSSES.find(b=>b.kind===which)||BOSSES[0];
+ return {...base,type:'boss',x:W/2,y:150,r:29,hp:base.hp,maxHp:base.hp,speed:base.speed,attackCD:1.25,flash:0,windup:0,hit:false,phase:0,telegraph:null,pattern:0,strafe:1,comboLeft:0,spin:.3};}
+function enterRoom(entry='start'){wave=roomDepth+1;
+ player.x=entry==='west'?125:entry==='east'?W-125:W/2;
+ player.y=entry==='north'?100:entry==='south'?H-100:H*.73;
+ player.invuln=.85;player.dashCD=0;enemies=[];particles=[];projectiles=[];bossTitleTime=0;arenaTime=0;roomToast=0;setBonfire();
+ visitedRooms.add(roomKey());roomCleared=clearedRooms.has(roomKey())||roomHasBonfire()||defeatedBosses.has(roomKey());doorOpen=roomCleared;
+ if(roomCleared){notice=bonfire?'Aproxime-se e interaja para SENTAR na fogueira':'SALA SEGURA · ESCOLHA UMA PASSAGEM';roomToast=2.7;$('bossBanner').hidden=true}
+ else if(roomX===0&&(roomDepth===12||roomDepth===MAX_DEPTH)){
+ const boss=pickBoss();enemies.push(boss);bossTitleTime=3.4;$('bossBanner').textContent=boss.name;$('bossBanner').hidden=false;
+ }else{const count=Math.min(2+Math.floor(roomDepth/4)+Math.min(2,Math.abs(roomX)),7);
+ for(let i=0;i<count;i++)spawnEnemy();$('bossBanner').hidden=true;}
+ refreshHUD(true);setPage('playing');}
 function enterWave(){enterRoom()}
 function spawnEnemy(){const r=Math.random(),type=r<.20?'brute':r<.43?'runner':r<.67?'archer':r<.83?'spearman':'wanderer';let x,y,n=0;do{const side=Math.floor(rand(0,4));x=side===0?67:side===1?W-67:rand(80,W-80);y=side===2?75:side===3?H-75:rand(75,H-75)}while((Math.hypot(x-player.x,y-player.y)<205||(bonfire&&Math.hypot(x-bonfire.x,y-bonfire.y)<110)||Math.abs(x-W/2)<110&&y<150)&&n++<60);
  const base={brute:[91,39,22,22],runner:[35,76,14,9],archer:[41,52,16,11],spearman:[62,58,18,15],wanderer:[52,53,17,13]}[type],scale=1+Math.min(1.1,(wave-1)*.045);
@@ -167,38 +219,40 @@ function strongAttack(){
 function direction(){let x=Number(keys.has('d')||keys.has('arrowright'))-Number(keys.has('a')||keys.has('arrowleft'));let y=Number(keys.has('s')||keys.has('arrowdown'))-Number(keys.has('w')||keys.has('arrowup'));if(Math.hypot(x,y)>0){let l=Math.hypot(x,y);return{x:x/l,y:y/l}}return Math.hypot(gamepadDirection.x,gamepadDirection.y)>.18?gamepadDirection:{x:stick.x,y:stick.y}}
 function dash(){if(state!=='playing'||player.dashCD>0||player.stamina<25||player.heavyWindup>0)return;SFX('dash');let d=direction(),m=Math.hypot(d.x,d.y);if(m<.15){d={x:player.dx,y:player.dy};m=1}player.dashX=d.x/m;player.dashY=d.y/m;player.dx=player.dashX;player.dy=player.dashY;player.stamina-=25;player.dashCD=.55;player.dashTime=.22;player.invuln=.30;spark(player.x,player.y,'#70e5f6',14)}
 function die(){SFX('death');player.hp=0;refreshHUD();$('deathInfo').textContent=`Você caiu na sala ${wave}. O último descanso foi na sala ${checkpointRoom}.`;setPage('dead')}
-let musicCheck=0;function update(dt){if(state!=='playing')return;musicCheck+=dt;if(musicCheck>.42){musicCheck=0;setMusic(enemies.some(e=>e.type==='boss')?'boss':nearFire()?'bonfire':'silence')}clock+=dt;arenaTime+=dt;bossTitleTime=Math.max(0,bossTitleTime-dt);if(bossTitleTime<=0)$('bossBanner').hidden=true;const p=player;p.attackCD=Math.max(0,p.attackCD-dt);
+function update(dt){if(state!=='playing')return;clock+=dt;arenaTime+=dt;bossTitleTime=Math.max(0,bossTitleTime-dt);if(bossTitleTime<=0)$('bossBanner').hidden=true;const p=player;p.attackCD=Math.max(0,p.attackCD-dt);
  if(p.heavyWindup>0){p.heavyWindup=Math.max(0,p.heavyWindup-dt);if(p.heavyWindup===0)strike(true)}
- p.attackTimer=Math.max(0,p.attackTimer-dt);p.dashCD=Math.max(0,p.dashCD-dt);p.dashTime=Math.max(0,p.dashTime-dt);p.invuln=Math.max(0,p.invuln-dt);p.flash=Math.max(0,p.flash-dt);p.healCD=Math.max(0,p.healCD-dt);healingAnim=Math.max(0,healingAnim-dt);roomToast=Math.max(0,roomToast-dt);updateSnow(dt);p.stamina=Math.min(p.maxStamina,p.stamina+dt*23);
- let move=direction(),len=Math.hypot(move.x,move.y);if(len>.12&&p.dashTime<=0){p.dx=move.x/len;p.dy=move.y/len;}let vx=p.dashTime>0?p.dashX*510:move.x*(p.gender==='feminino'?268:245),vy=p.dashTime>0?p.dashY*510:move.y*(p.gender==='feminino'?268:245);p.x=clamp(p.x+vx*dt,44,W-44);p.y=clamp(p.y+vy*dt,44,H-44);p.moving=Math.hypot(vx,vy)>38;p.animTime=(p.animTime||0)+(p.moving?dt*2.5:dt*.1);
- if(p.moving&&p.dashTime<=0){footstepClock-=dt;if(footstepClock<=0){SFX('step');footstepClock=p.gender==='feminino'?.30:.34}}else footstepClock=0;if(doorOpen&&p.y<80&&Math.abs(p.x-W/2)<72){nextRoom();return}if(touchAttack.held||padAttackHeld||keys.has('j')||keys.has(' '))attack();
+ p.attackTimer=Math.max(0,p.attackTimer-dt);p.dashCD=Math.max(0,p.dashCD-dt);p.dashTime=Math.max(0,p.dashTime-dt);p.invuln=Math.max(0,p.invuln-dt);p.flash=Math.max(0,p.flash-dt);p.healCD=Math.max(0,p.healCD-dt);healingAnim=Math.max(0,healingAnim-dt);roomToast=Math.max(0,roomToast-dt);restPose=Math.max(0,restPose-dt);updateSnow(dt);p.stamina=Math.min(p.maxStamina,p.stamina+dt*23);
+ let move=restPose>0?{x:0,y:0}:direction(),len=Math.hypot(move.x,move.y);if(len>.12&&p.dashTime<=0){p.dx=move.x/len;p.dy=move.y/len;}let vx=p.dashTime>0?p.dashX*510:move.x*(p.gender==='feminino'?268:245),vy=p.dashTime>0?p.dashY*510:move.y*(p.gender==='feminino'?268:245);p.x=clamp(p.x+vx*dt,44,W-44);p.y=clamp(p.y+vy*dt,44,H-44);p.moving=Math.hypot(vx,vy)>38;p.animTime=(p.animTime||0)+(p.moving?dt*2.5:dt*.1);
+ if(p.moving&&p.dashTime<=0){footstepClock-=dt;if(footstepClock<=0){SFX('step');footstepClock=p.gender==='feminino'?.30:.34}}else footstepClock=0;if(roomCleared){const d=roomDoors();
+ if(d.north&&p.y<58&&Math.abs(p.x-W/2)<67){travel(0,1);return}
+ if(d.south&&p.y>H-58&&Math.abs(p.x-W/2)<67){travel(0,-1);return}
+ if(d.west&&p.x<58&&Math.abs(p.y-H/2)<72){travel(-1,0);return}
+ if(d.east&&p.x>W-58&&Math.abs(p.y-H/2)<72){travel(1,0);return}}
+if(touchAttack.held||padAttackHeld||keys.has('j')||keys.has(' '))attack();
  for(const e of enemies){const ox=e.x,oy=e.y;updateEnemy(e,dt);e.moving=Math.hypot(e.x-ox,e.y-oy)>dt*9;e.animTime=(e.animTime||0)+(e.moving?dt*2.3:dt*.08);if(state!=='playing')break}
  if(state!=='playing')return;
  for(let i=projectiles.length-1;i>=0;i--){const b=projectiles[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;if(b.life<=0||b.x<26||b.y<24||b.x>W-26||b.y>H-24){projectiles.splice(i,1);continue}if(Math.hypot(b.x-p.x,b.y-p.y)<b.r+p.r){applyPlayerDamage(b.dmg,b.x,b.y);projectiles.splice(i,1);if(state!=='playing')return;}}
  for(let i=enemies.length-1;i>=0;i--)if(enemies[i].hp<=0){const e=enemies[i];spark(e.x,e.y,e.type==='boss'?'#d7a7ff':'#a2f4cb',e.type==='boss'?42:14);enemies.splice(i,1);kills++;p.stamina=Math.min(p.maxStamina,p.stamina+(e.type==='boss'?20:8))}
- if(enemies.length===0&&!roomCleared){SFX('win');roomCleared=true;doorOpen=true;notice='SALA LIMPA! A passagem ao norte está aberta.';roomToast=4;}
+ if(enemies.length===0&&!roomCleared){roomCleared=true;doorOpen=true;clearedRooms.add(roomKey());
+ const bossRoom=roomX===0&&(roomDepth===12||roomDepth===MAX_DEPTH);
+ if(bossRoom){defeatedBosses.add(roomKey());saveCheckpoint();}
+ notice=roomDepth===MAX_DEPTH&&bossRoom?'PÁTIO EXTERNO CONCLUÍDO · A PRÓXIMA ÁREA VIRÁ NA DEMO FUTURA':bossRoom?'CHEFE DERROTADO · CAMINHO LIBERADO':'SALA LIMPA · PASSAGENS LIBERADAS';roomToast=bossRoom?8:4;}
+
  for(let i=particles.length-1;i>=0;i--){const q=particles[i];q.x+=q.vx*dt;q.y+=q.vy*dt;q.life-=dt;if(q.life<=0)particles.splice(i,1)}shake=Math.max(0,shake-dt);refreshHUD();}
 function render(){ctx.clearRect(0,0,W,H);ctx.save();if(shake)ctx.translate(rand(-3,3),rand(-3,3));
- ctx.drawImage(groundLayer,0,0);
+ window.DeadWorld.drawBackground(ctx,roomX,roomDepth);
  ctx.fillStyle='#101721';ctx.fillRect(0,0,W,33);ctx.fillRect(0,H-30,W,30);ctx.fillRect(0,0,31,H);ctx.fillRect(W-31,0,31,H);
  for(const [x,y] of [[110,93],[W-110,93],[110,H-92],[W-110,H-92]]){ctx.fillStyle='#090f1a88';ctx.beginPath();ctx.ellipse(x+7,y+14,34,14,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#3d4c5e';ctx.fillRect(x-22,y-24,44,48);ctx.fillStyle='#526174';ctx.fillRect(x-27,y-29,54,13);ctx.fillStyle='#182638';ctx.fillRect(x-15,y-8,30,23);ctx.fillStyle='#384c62';ctx.fillRect(x-26,y+19,52,10);ctx.fillStyle='#9e6f53';ctx.fillRect(x-4,y-35,8,9);ctx.shadowColor='#f9a45a';ctx.shadowBlur=18;ctx.fillStyle='#f6bb69';ctx.beginPath();ctx.ellipse(x,y-40,6,10,Math.sin(arenaTime*3)*.2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
- // Vitrais e portão.
- ctx.fillStyle='#0a111d';ctx.fillRect(W/2-74,0,148,44);ctx.fillStyle=doorOpen?'#668d86':'#455268';ctx.fillRect(W/2-64,0,128,29);for(let x=W/2-55;x<W/2+60;x+=22){ctx.fillStyle=doorOpen?'#a8d2c8':'#334f69';ctx.fillRect(x,2,7,27)}if(doorOpen){ctx.fillStyle='#e5f5ec';ctx.textAlign='center';ctx.font='bold 13px Georgia';ctx.fillText('PASSAGEM ABERTA',W/2,63);ctx.textAlign='left'}
+ // Saídas se adaptam ao mapa: norte, sul, oeste e leste.
+ window.DeadWorld.drawPassages(ctx,roomDoors(),roomCleared);
  // Fogueira fixa no mapa: só pode ser usada quando a sala estiver segura.
- if(bonfire){const x=bonfire.x,y=bonfire.y,t=arenaTime;ctx.save();
- // círculo de cinzas, pedras irregulares e troncos entrecruzados
- ctx.fillStyle='#0e131cbb';ctx.beginPath();ctx.ellipse(x,y+14,53,23,0,0,Math.PI*2);ctx.fill();
- for(let i=0;i<11;i++){let a=i*Math.PI*2/11;ctx.fillStyle=i%2?'#67717c':'#454c57';ctx.beginPath();ctx.ellipse(x+39*Math.cos(a),y+14+14*Math.sin(a),9,6,a,0,Math.PI*2);ctx.fill()}
- ctx.lineCap='round';for(const a of [-.44,.55]){ctx.strokeStyle='#3a2825';ctx.lineWidth=13;ctx.beginPath();ctx.moveTo(x-26,y+10-a*8);ctx.lineTo(x+27,y+12+a*10);ctx.stroke();ctx.strokeStyle='#946144';ctx.lineWidth=3;ctx.stroke()}
- // espada do checkpoint e brasa que dança com o vento
- ctx.save();ctx.shadowColor='#ed7337';ctx.shadowBlur=22;let flick=Math.sin(t*11)*3;
- for(let i=0;i<4;i++){ctx.fillStyle=['#e87439','#ffae47','#ffd17b','#f8e2a2'][i];ctx.beginPath();ctx.moveTo(x-20+i*6,y+13);ctx.quadraticCurveTo(x-24+i*10,y-17+flick,x-6+i*8,y-37-i*4+flick);ctx.quadraticCurveTo(x+6+i*7,y-10,x+17-i*3,y+15);ctx.closePath();ctx.fill()}ctx.restore();
- ctx.strokeStyle='#adb5b7';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x+2,y-9);ctx.lineTo(x+4,y-62);ctx.stroke();ctx.strokeStyle='#bb9b71';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x-12,y-42);ctx.lineTo(x+20,y-43);ctx.stroke();
- for(let i=0;i<8;i++){let py=(i*21+t*37)%68;ctx.globalAlpha=(1-py/85)*.85;ctx.fillStyle=i%2?'#ffd39a':'#ef7948';ctx.beginPath();ctx.arc(x+Math.sin(t*1.7+i*13)*14,y+6-py,2.5,0,7);ctx.fill()}ctx.globalAlpha=1;ctx.restore();
- if(nearFire()&&state==='playing'){ctx.fillStyle='#f8e7bf';ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillText(enemies.length?'FOGUEIRA BLOQUEADA':'[E / A] DESCANSAR',x,y-80);ctx.textAlign='left'}}
+ if(bonfire){window.DeadWorld.bonfire(ctx,bonfire.x,bonfire.y,arenaTime,nearFire());
+ if(nearFire()&&state==='playing'){
+ ctx.fillStyle='#f8e7bf';ctx.font='bold 13px system-ui';ctx.textAlign='center';
+ ctx.fillText('[E / A] SENTAR NA FOGUEIRA',bonfire.x,bonfire.y-119);ctx.textAlign='left';}}
  // Partículas de neve animadas, com vento lateral constante.
  for(const q of snow){ctx.fillStyle='rgba(219,237,248,.70)';ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,Math.PI*2);ctx.fill()}
- if(roomToast>0){ctx.fillStyle='#e8ddc2';ctx.textAlign='center';ctx.font='bold 17px Georgia';ctx.fillText(notice,W/2,H-42);ctx.textAlign='left'}
+ if(roomToast>0){ctx.fillStyle='#0b1823c9';ctx.fillRect(185,H-131,590,44);ctx.fillStyle='#f4e6c8';ctx.textAlign='center';ctx.font='bold 14px Georgia';ctx.fillText(notice,W/2,H-104,555);ctx.textAlign='left'}
  for(const b of projectiles){ctx.shadowColor=b.color;ctx.shadowBlur=14;ctx.fillStyle=b.color;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
  for(const e of enemies){const boss=e.type==='boss',r=e.r;ctx.fillStyle='#040a11a8';ctx.beginPath();ctx.ellipse(e.x+5,e.y+r*.75,r*1.2,10,0,0,Math.PI*2);ctx.fill();
  if(e.telegraph){const t=e.telegraph;ctx.save();ctx.globalAlpha=.18+.27*(1-t.t/t.initial);ctx.strokeStyle='#ff7a7a';ctx.fillStyle='#f24e6380';ctx.lineWidth=5;if(t.type==='slam'){ctx.beginPath();ctx.arc(e.x,e.y,t.radius,0,Math.PI*2);ctx.fill();ctx.stroke()}else if(t.type==='dash'||t.type==='doubleDash'){ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(t.angle)*t.range,e.y+Math.sin(t.angle)*t.range);ctx.stroke()}else if(['fan','wideFan','line'].includes(t.type)){const spread=t.type==='wideFan'?.72:t.type==='line'?.17:.48;ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.arc(e.x,e.y,175,t.angle-spread,t.angle+spread);ctx.closePath();ctx.fill();ctx.stroke()}else{ctx.beginPath();ctx.arc(e.x,e.y,t.type==='cross'?120:90,0,Math.PI*2);ctx.stroke()}ctx.restore()}
@@ -219,7 +273,7 @@ function render(){ctx.clearRect(0,0,W,H);ctx.save();if(shake)ctx.translate(rand(
  if(p.attackTimer>0){ctx.strokeStyle=p.attackCD>.7?'#ffd29b':'#b3ffeb';ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();const a=Math.atan2(p.dy,p.dx);ctx.arc(p.x,p.y,66,a-.8,a+.8);ctx.stroke()}}
  for(const part of particles){ctx.globalAlpha=Math.max(0,part.life/part.maxLife);ctx.fillStyle=part.col;ctx.fillRect(part.x,part.y,5,5)}ctx.globalAlpha=1;
  const boss=enemies.find(e=>e.type==='boss');if(boss){const bw=360,bx=(W-bw)/2,by=46;ctx.fillStyle='#0a121ccf';ctx.fillRect(bx-7,by-7,bw+14,33);ctx.fillStyle='#512b43';ctx.fillRect(bx,by,bw,12);ctx.fillStyle=boss.color;ctx.fillRect(bx,by,bw*Math.max(0,boss.hp)/boss.maxHp,12);ctx.fillStyle='#f8ecdd';ctx.textAlign='center';ctx.font='bold 14px Georgia,serif';ctx.fillText(boss.name,W/2,by+28);ctx.textAlign='left'}
- ctx.fillStyle='#cddcea';ctx.font='bold 15px system-ui';ctx.fillText(roomName(),37,26);ctx.restore()}
+ if(!boss){ctx.fillStyle='#0a1921c9';ctx.fillRect(226,62,508,28);ctx.fillStyle='#cddcea';ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillText(roomName(),W/2,81,485);ctx.textAlign='left'}ctx.restore()}
 let frameStamp=0;
 function loop(now){requestAnimationFrame(loop);if(now-frameStamp<33)return;const dt=last?Math.min(.05,(now-last)/1000):0;frameStamp=now;last=now;pollPad(dt);if(state==='playing'){update(dt);render()}else if(!menuDrawn){render();menuDrawn=true}}
 let menuDrawn=false;requestAnimationFrame(loop);
@@ -230,13 +284,13 @@ function updateName(){ $('typedName').textContent=typedName||'SEU NOME...';$('co
 function editName(k){if(k==='back')typedName=typedName.slice(0,-1);else if(k==='space'){if(typedName.length<16)typedName+=' '}else if(k==='ok'){createProfile();return}else if(typedName.length<16)typedName+=k;updateName();}
 function makeKeyboard(){const keyboard=$('letterKeyboard');keyboard.replaceChildren();for(const key of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'){const btn=document.createElement('button');btn.type='button';btn.textContent=key;btn.setAttribute('aria-label','Adicionar '+key);btn.onclick=()=>editName(key);keyboard.append(btn)}for(const [label,key] of [['ESPAÇO','space'],['APAGAR','back'],['PRONTO','ok']]){const btn=document.createElement('button');btn.textContent=label;btn.type='button';btn.className='wideKey';btn.onclick=()=>editName(key);keyboard.append(btn)}}
 function chooseGender(g){selectedGender=g;$('genderMale').classList.toggle('chosen',g==='masculino');$('genderFemale').classList.toggle('chosen',g==='feminino');}
-function createProfile(){if(profiles.length>=3||!typedName.trim())return;profiles.push({name:typedName.trim().slice(0,16),gender:selectedGender,wave:1,checkpointRoom:1,kills:0,clock:0});if(persist()){profileList();selectProfile(profiles.length-1)}else{profiles.pop();setPage('saves')}}
+function createProfile(){if(profiles.length>=3||!typedName.trim())return;profiles.push({name:typedName.trim().slice(0,16),gender:selectedGender,wave:1,checkpointRoom:1,checkpointDepth:0,checkpointX:0,defeatedBosses:[],kills:0,clock:0});if(persist()){profileList();selectProfile(profiles.length-1)}else{profiles.pop();setPage('saves')}}
 $('createSave').onclick=()=>{if(profiles.length>=3)return;typedName='';chooseGender('masculino');updateName();setPage('create')};
 $('genderMale').onclick=()=>chooseGender('masculino');$('genderFemale').onclick=()=>chooseGender('feminino');$('confirmCreate').onclick=createProfile;$('cancelCreate').onclick=()=>setPage('saves');makeKeyboard();
 
 $('healBtn').onclick=()=>{player.hp=player.maxHp;player.stamina=player.maxStamina;player.flasks=HEALS_MAX;refreshHUD();$('restHint').textContent='Vida, vigor e 3 frascos restaurados!'};
 $('saveBtn').onclick=()=>{$('restHint').textContent=saveCheckpoint()?'Jornada salva nesta fogueira!':'Não foi possível salvar.'};$('startWave').onclick=()=>{setPage('playing')};$('restToMenu').onclick=menuHome;
-$('retryBtn').onclick=()=>{const d=profiles[slot];if(d){wave=d.checkpointRoom||d.wave||1;checkpointRoom=wave;kills=d.kills||0;clock=d.clock||0;player=makePlayer();enterRoom()}else menuHome()};$('deathMenu').onclick=menuHome;
+$('retryBtn').onclick=()=>{const d=profiles[slot];if(d){roomDepth=checkpointDepth;roomX=checkpointX;wave=roomDepth+1;checkpointRoom=wave;kills=d.kills||0;clock=d.clock||0;clearedRooms=new Set([...defeatedBosses]);for(const depth of FIRE_DEPTHS)clearedRooms.add(roomKey(0,depth));player=makePlayer();enterRoom()}else menuHome()};$('deathMenu').onclick=menuHome;
 $('resumeBtn').onclick=()=>setPage('playing');$('pauseSave').onclick=()=>{$('statusText').textContent='Salve interagindo com uma fogueira segura'};$('pauseMenu').onclick=menuHome;
 function pause(){if(state==='playing')setPage('paused');else if(state==='paused')setPage('playing')}$('pauseBtn').onclick=pause;$('menuBtn').onclick=()=>{if(state==='playing')setPage('paused');else menuHome()};
 
@@ -263,4 +317,6 @@ $('homeSettings').onclick=()=>{settingsFrom='home';setPage('settings')};$('pause
 window.addEventListener('gamepadconnected',()=>{gamepadActive=true;$('touchControls').hidden=true});
 window.addEventListener('gamepaddisconnected',()=>{gamepadActive=false;$('touchControls').hidden=state!=='playing'});
 window.DeadActors?.preload();generateSnow();player=makePlayer();refreshHUD(true);setPage('home');initDatabase();
+// Diagnósticos mínimos para testes automatizados, sem alterar o jogo.
+window.DeadSoulsDebug={getState:()=>({state,roomX,roomDepth,checkpointX,checkpointDepth,roomCleared,bonfire:!!bonfire,enemies:enemies.length,flasks:player?.flasks,hp:player?.hp,bosses:[...defeatedBosses],cleared:[...clearedRooms]}),travel,restAtFire,enterRoom,roomExists,roomDoors,applyPlayerDamage,player:()=>player,clearEnemies:()=>{enemies.forEach(e=>e.hp=0)}};
 })();

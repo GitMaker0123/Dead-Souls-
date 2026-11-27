@@ -1,14 +1,32 @@
-DEAD SOULS PRE-DEMO 1.1.3 FIXED 2 — CORREÇÃO DE MÚSICA
+DEAD SOULS — MCE1809 — PRÉ-DEMO 1.2 (VISUAL E EXPLORAÇÃO)
+==========================================================
 
-- Menu: musica-menu.ogg do primeiro vídeo, cortada antes da mudança de música.
-- Fogueira: musica-fogueira.ogg do segundo vídeo.
-- Chefe: musica-chefe.ogg da versão anterior (NÃO foi alterada musicalmente).
-- Volume das 3 faixas aumentado na mixagem do jogo (sem alterar arquivos).
-- Falha de tentativa de reprodução corrigida; novas tentativas quando o navegador permite.
-- URLs dos scripts e áudio atualizadas para evitar versões antigas presas em cache.
-- Service Worker renovado com atualização por rede e apoio offline.
+ATUALIZAÇÃO NO GITHUB
+1. Faça backup dos seus arquivos de save pelo próprio navegador antes de limpar dados.
+2. Extraia o ZIP. Envie OS ARQUIVOS SOLTOS (não a pasta) à raiz da branch main.
+3. Os arquivos NOVOS e obrigatórios são world.js e os arquivos atualizados game.js, actors.js, index.html, style.css e sw.js.
+4. O áudio foi removido nesta versão: audio.js, .mp3 e .ogg antigos podem permanecer no repositório, mas o jogo não os chama nem os coloca no novo cache. Você pode apagar esses arquivos obsoletos do repositório, se desejar.
+5. Confirme o Commit changes, atualize conectado à internet e feche/reabra o aplicativo instalado. A marca na tela deve dizer PRÉ-DEMO 1.2.
+6. NÃO LIMPE os dados do site: saves anteriores são importados pelo mesmo banco IndexedDB.
 
-PUBLICAÇÃO: Extraia o ZIP. Envie todos os arquivos extraídos à raiz do repositório, branch main, e confirme o commit. NÃO limpe dados locais (saves).
-Abra o site no navegador com internet e atualize; se instalou como aplicativo PWA, feche-o completamente e reabra depois de atualizar no navegador.
-A música só começa após interação com a página por restrições do navegador.
-A música da fogueira toca quando você se aproxima de uma fogueira ou entra em uma tela de descanso. O chefe só toca nas salas de chefe (5, 10, 15...).
+O QUE MUDOU
+- Área Pátio Externo: piso, muralhas, neve, ruínas, árvores, degraus e decoração mais variados.
+- Sprites: armaduras, elmos, cores, insígnias dos chefes e animações um pouco mais trabalhadas.
+- Mapa: corredor principal com 25 salas (profundidades 0 a 24); desvios oeste/leste e alguns subdesvios.
+- Salas comuns limpas permanecem limpas até o próximo descanso numa fogueira.
+- Fogueiras: nas salas 1, 9, 17 e 23 do caminho principal. Aproxime-se e use A (gamepad), E (teclado) ou INTERAGIR (toque). Sentar restaura vida, vigor e 3 frascos; salva e faz os inimigos comuns ressurgirem quando suas salas forem revisitadas.
+- Chefes: Cavaleiro Corrompido na sala central 13; Executor do Palácio na sala central 25.
+- Chefes mortos não reaparecem, nem depois de descanso ou morte do jogador, e as vitórias são guardadas em saves.
+- Áudio: desativado intencionalmente. Futuramente haverá packs separados para Guerreiro/MaleVoice.mp3 e Andarilha/FemaleVoice.mp3.
+
+CONTROLES
+Xbox: analógico esquerdo movimentar; RB ataque, RT forte, A interagir, X curar, B esquiva, Start pausa.
+PlayStation: analógico esquerdo; R1 ataque, R2 forte, X(cruz) interagir, quadrado curar, círculo esquiva.
+Teclado: WASD/setas, J atacar, L forte, Shift esquivar, E interagir, H/Q curar, Esc pausar.
+Celular: analógico e botões de toque. Tela deitada recomendada.
+
+NOTAS
+- O jogo é PWA e funciona offline DEPOIS de instalar/abrir online para atualizar o cache.
+- A expressão '+20%' é meta de evolução visual; não é métrica técnica garantida.
+- A tela cheia no navegador depende de permissão do sistema e da interação do usuário.
+- A versão foi preparada para testes no navegador; valide especialmente desempenho, gamepad e saves no seu celular antes de divulgar como estável.

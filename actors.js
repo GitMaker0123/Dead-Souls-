@@ -10,11 +10,18 @@ const CACHE=new Map(), palettes={
   female:['#4d4263','#bbb1d6','#302941','#d3b9a1'],
   boss:['#413d54','#a7a4ae','#24263b','#c7b4aa']
 };
+const bossPalettes={
+ alchemist:['#345c46','#9fbc93','#203f37','#bda48d'],butcher:['#713f44','#b0a2a1','#34272b','#cda996'],
+ reaper:['#3f3b60','#9886b1','#25273c','#a7a0a9'],nameless:['#3d4d5d','#b7c2c5','#273241','#c1aca1'],
+ king:['#665037','#d1b780','#302b32','#d2ba9d'],guard:['#315467','#9ebed1','#223441','#b5a38e'],
+ executioner:['#663b44','#a4a8aa','#282832','#b3a196'],corrupted:['#524068','#a592c2','#242239','#b9a2a5'],
+ abyss:['#33415f','#8597b7','#1a2439','#b4a19e']
+};
 function sprite(kind,variant=''){
  const key=kind+':'+variant;if(CACHE.has(key))return CACHE.get(key);
  const cn=document.createElement('canvas');cn.width=128;cn.height=160;
  const c=cn.getContext('2d'); c.lineJoin='round';c.lineCap='round';
- const pal=palettes[kind]||palettes.boss, [cloth,steel,shade,skin]=pal;
+ const pal=kind==='boss'?(bossPalettes[variant]||palettes.boss):(palettes[kind]||palettes.boss), [cloth,steel,shade,skin]=pal;
  const isBoss=kind==='boss',heavy=kind==='brute'||isBoss||kind==='male',female=kind==='female',archer=kind==='archer',spearman=kind==='spearman';
  const axe=kind==='brute'||(isBoss&&/executioner|butcher/i.test(variant));
  const bow=archer||(isBoss&&/alchemist|king/i.test(variant));
@@ -28,6 +35,10 @@ function sprite(kind,variant=''){
  poly([[-20,-22],[-28,5],[-26,47],[-10,40],[1,49],[17,39],[23,15],[16,-22]],shade);
  poly([[-14,-17],[-22,17],[-17,43],[-7,36],[0,42],[5,-12]],cloth,null);
  for(let i=0;i<5;i++)line([[-24+i*9,31+(i%2)*4],[-21+i*9,39+(i%3)*3]],'#938177',1.5);
+ // Reforço dos tecidos: remendos, costuras, cortes e tons de ferrugem.
+ for(let j=0;j<6;j++){const yy=-7+j*8;line([[-25+(j%3)*4,yy],[-19+(j%2)*5,yy+7]],j%2?'#c6b5a05a':'#1c1c25aa',1.3)}
+ if(isBoss){poly([[-19,-24],[0,-29],[20,-24],[12,8],[0,15],[-13,7]],cloth,'#c5a47e',2);
+ for(let j=0;j<4;j++){line([[-11+j*7,-18],[-6+j*7,4]],'#d3c5b073',1)}}
  // Pernas distintas, joelheiras, botas, cintos de couro.
  for(const side of [-1,1]){
    const cx=side*10;
@@ -71,7 +82,14 @@ function sprite(kind,variant=''){
    line([[0,-59],[0,-49]],'#e2ccaa',1.5);
  }
  // Arranhões, rebites, costuras e manchas da armadura envelhecida.
- for(let i=0;i<12;i++){
+ for(const side of [-1,1]){
+  const xx=side*21;
+  for(let j=0;j<3;j++)line([[xx+side*2,1+j*7],[xx+side*8,3+j*7]],'#c7b7a173',1);
+  ellipse(side*11,37,5,3,'#2c3840');
+ }
+ // Placas sobrepostas de cota de malha abaixo do peitoral.
+ for(let yy=19;yy<=31;yy+=4){for(let xx=-15;xx<=15;xx+=6){c.strokeStyle='#a3adb38c';c.lineWidth=.9;c.beginPath();c.arc(xx+(yy%8?2:0),yy,3,0,Math.PI);c.stroke()}}
+ for(let i=0;i<20;i++){
    const x=((i*17+7)%38)-19,y=((i*29+11)%49)-21;
    line([[x,y],[x+3+(i%3),y-(i%4)]],i%3===0?'#513e39':'#e0c6a655',1);
  }
@@ -105,12 +123,32 @@ function sprite(kind,variant=''){
    poly([[-41,-13],[-28,-15],[-24,-2],[-26,17],[-40,15]],'#7c7e82');
    line([[-39,7],[-27,6]],'#d5bba0',2);
  }
- if(isBoss){line([[-19,-62],[-24,-77]],'#d4b797',5);line([[14,-61],[23,-75]],'#d4b797',5);ellipse(0,6,7,6,'#c4a577');}
+ if(isBoss){
+ // Detalhes próprios de chefes — deixam de ser apenas soldados maiores.
+ if(variant==='corrupted'||variant==='abyss'){line([[-13,-55],[-25,-76]],'#a58dbb',7);line([[13,-55],[25,-79]],'#a58dbb',7);
+   line([[-12,-40],[-4,-40]],'#db87ff',2.5);line([[4,-40],[12,-40]],'#db87ff',2.5);
+   for(let j=0;j<4;j++)line([[-15+j*9,-17],[-19+j*9,8]],'#7f6c9b',2);}
+ else if(variant==='executioner'||variant==='butcher'){
+   poly([[-23,-53],[-15,-67],[15,-67],[23,-53],[15,-30],[-18,-30]],'#67727b','#251e2b',3);
+   line([[-18,-40],[18,-40]],'#171923',6);for(let j=0;j<5;j++)line([[-14+j*7,-43],[-14+j*7,-34]],'#c0b7a3',2);
+   poly([[-44,-24],[-25,-30],[-19,-5],[-36,2]],'#b8a79f');}
+ else if(variant==='king'){line([[-16,-59],[-23,-74]],'#d6bc7a',5);line([[0,-64],[0,-82]],'#e7c47d',5);line([[14,-59],[23,-74]],'#d6bc7a',5);ellipse(0,5,8,7,'#dfbd85');}
+ else{line([[-19,-62],[-24,-77]],'#d4b797',5);line([[14,-61],[23,-75]],'#d4b797',5);ellipse(0,6,7,6,'#c4a577');}
+ }
+ if(kind==='female'){ // Pelerine sobre um peitoral mais estreito, mantendo proteção e leitura visual.
+  poly([[-16,-24],[-8,-28],[3,-17],[-2,9],[-12,3]],'#7e7197','#41354a',1.5);
+  line([[-12,-18],[-3,-5]],'#d8c6df',2.3);
+ }
+ if(kind==='male'){ // Ombreiras maciças, placas de aço riscadas.
+  poly([[-37,-20],[-21,-28],[-15,-10],[-30,-4]],'#839eaf','#283d4f',2);
+  line([[-31,-15],[-20,-19]],'#d5e3e9',2);
+ }
+
  // A imagem é gerada somente uma vez: desempenho melhor em aparelhos modestos.
  CACHE.set(key,cn);return cn;
 }
 function draw(ctx,kind,x,y,r,variant='',flash=false,move=0,face=1,moving=false,attacking=false){
- const size=Math.max(37,r*3.7),sw=size*.76,art=sprite(kind,variant),phase=move*9;
+ const size=Math.max(42,r*4.3),sw=size*.76,art=sprite(kind,variant),phase=move*9;
  ctx.save();ctx.translate(x,y-5);ctx.scale(face,1);
  if(flash){ctx.globalAlpha=.82;ctx.filter='brightness(1.8)'}
  if(moving){
@@ -119,12 +157,14 @@ function draw(ctx,kind,x,y,r,variant='',flash=false,move=0,face=1,moving=false,a
    // Cada metade inferior do sprite é deslocada separadamente.
    ctx.drawImage(art,29,105,35,55,-sw*.28+stride*.6,-size*.70+size*105/160+Math.abs(stride)*.21,sw*35/128,size*55/160);
    ctx.drawImage(art,64,105,35,55,sw*.01-stride*.6,-size*.70+size*105/160+Math.abs(stride)*.21,sw*35/128,size*55/160);
-   ctx.save();ctx.translate(0,Math.sin(phase*2)*1.2);ctx.rotate(Math.sin(phase)*.035+(attacking?-.09:0));
+   ctx.save();ctx.translate(0,Math.sin(phase*2)*1.9-Math.abs(Math.sin(phase))*1.6);ctx.rotate(Math.sin(phase)*.052+(attacking?-.14:0));
    ctx.drawImage(art,0,0,128,109,-sw/2,-size*.70,sw,size*109/160);ctx.restore();
  }else{
-   ctx.rotate(attacking?-.10:0);
+   ctx.rotate(attacking?-.14:0);
    ctx.drawImage(art,-sw/2,-size*.70+Math.sin(move*2)*.5,sw,size);
  }
+ // Efeito de giro e prolongamento da mão armada durante golpes.
+ if(attacking){ctx.save();ctx.strokeStyle=kind==='boss'?'#c8a6ebaf':kind==='female'?'#d8d1ef9e':'#d9e9eba6';ctx.lineWidth=Math.max(2,size*.025);ctx.beginPath();ctx.arc(sw*.27,-size*.30,size*.23,-1.1,.9);ctx.stroke();ctx.restore()}
  ctx.restore();
 }
 window.DeadActors={draw,preload(){for(const k of Object.keys(palettes))sprite(k);}};

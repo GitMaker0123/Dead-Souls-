@@ -1,0 +1,25 @@
+TESTES DA PRÉ-DEMO 1.2 — MCE1809
+=================================
+Aprovados na execução de navegador isolada (Chromium, scripts injetados, sem hospedagem):
+[OK] Renderização da tela inicial e criação de save.
+[OK] Entrada na primeira sala e fogueira visível.
+[OK] Sentar na fogueira restaura vida e exatamente três frascos.
+[OK] Avanço para salas centrais, ala oeste e retorno (backtracking).
+[OK] Inimigos comuns reaparecem ao revisitar após descansar.
+[OK] Primeiro chefe no caminho principal, sala 13; derrota persistente.
+[OK] Após descansar, primeiro chefe não reaparece.
+[OK] Chefe final da área, sala principal 25, e final da rota bloqueado.
+[OK] Cache de cenários nunca excede quatro salas geradas.
+[OK] Nenhum erro JavaScript durante a sequência automatizada.
+[OK] Sintaxe de todos os JS, vínculos de HTML/Service Worker, ícones e ZIP.
+
+O navegador não permitiu navegar para o servidor local: usou-se carregamento de scripts
+em uma página isolada; nesse ambiente o armazenamento foi simulado com localStorage.
+Por isso os resultados NÃO substituem testes no GitHub Pages em Android/PWA real.
+
+A validar no dispositivo:
+[ ] Controle físico Xbox/PlayStation, navegação no menu, R1/R2 e botões.
+[ ] FPS/desempenho real no A31/A51.
+[ ] IndexedDB e migração com os saves existentes do usuário.
+[ ] Instalação PWA, orientação horizontal e atualização do service worker.
+[ ] Acessibilidade e visibilidade das saídas nas telas menores.

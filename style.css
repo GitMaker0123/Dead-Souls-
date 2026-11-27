@@ -61,3 +61,9 @@ canvas{width:100%;height:100%;display:block;touch-action:none}
 
 /* Pré-Demo 1.1.2: versão discreta, não interativa. */
 .versionStamp{position:absolute;left:8px;top:44px;z-index:8;pointer-events:none;color:#e1cba5;font:700 clamp(9px,1.4vw,12px)/1.2 system-ui,sans-serif;letter-spacing:.08em;text-shadow:0 2px 5px #080c13cc;background:#101a2bbb;border:1px solid #9f8d6655;border-radius:4px;padding:4px 6px;opacity:.85}
+
+/* Pré-Demo 1.2: acabamento dos menus, foco no cenário e HUD discreto. */
+.versionStamp{font-size:clamp(8px,1.2vw,11px);top:43px;opacity:.72;white-space:nowrap;max-width:40vw;overflow:hidden;text-overflow:ellipsis}
+.menuPage button:focus-visible,.menuPage button.pad-selected{outline-color:#f9e6b5}
+.menuPage .hint{max-width:620px;margin-inline:auto;line-height:1.3}
+.stage canvas{image-rendering:auto}
