@@ -1,0 +1,9 @@
+Demo 3.0.3 — pacote cumulativo
+- Preserva Pátio Externo, Catacumbas, NPCs, HUD, inventário, otimizações da 2.0.3.
+- Laboratório Profanado: 25 salas principais (profundidade 50-74) e alas laterais.
+- Chefes existentes da lista: Alquimista Maluco (sala 13), Açougueiro (sala 25).
+- NPCs Maela e Elod com comércio próprio; fogueiras nas salas 1, 9, 17 e 23.
+- Novas armas, armadura, escudo, pingente, almas cristalizadas e recompensas.
+- Cenário com bancadas, recipientes, tubos, vazamentos e iluminação verde de laboratório.
+- Saves no mesmo namespace; músicas desativadas.
+- Arte e animações dos inimigos ainda reutilizam suas bases com ajustes de nomes e atributos.

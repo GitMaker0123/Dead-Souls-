@@ -1,4 +1,4 @@
-/* Dead Souls Demo 1.0.1 — Pátio Externo: cenários pré-renderizados por sala. */
+/* Dead Souls Demo 1.0.2 — Pátio Externo: cenários pré-renderizados por sala. */
 (()=>{'use strict';
 const W=960,H=576,cache=new Map(),CAP=4;
 function hash(a,b){let n=Math.imul(a+19,73856093)^Math.imul(b+67,19349663)^0x4ca71;return n>>>0}
@@ -27,7 +27,67 @@ function generate(rx,depth){const rng=random(hash(rx,depth)),cn=document.createE
  if(depth%4===2){arch(c,744,150,58,74);for(let i=0;i<7;i++)stone(c,730+rng()*115,217+rng()*45,12+rng()*12,rng)}
  if(Math.abs(rx)===2){deadTree(c,743,248,1.05,rng);arch(c,175,160,62,86)}
  if(depth===12||depth===24){for(let i=0;i<5;i++){const x=200+i*130;ellipse(c,x,H*.46,45,15,'#0a1724bf');stone(c,x,H*.46,36,rng)}c.strokeStyle='#9d677575';c.lineWidth=4;c.beginPath();c.arc(W/2,H/2,153,0,Math.PI*2);c.stroke()}
- // Demo 1.0.1: arquitetura legível, detalhes estáticos pré-renderizados.
+ // Segunda área: Catacumbas da Cinza — corredores, urnas, chamas frias e cinzas.
+ if(depth>=25&&depth<50){
+  c.fillStyle='#190f19a8';c.fillRect(0,0,W,H);
+  for(let i=0;i<56;i++){const x=56+rng()*848,y=57+rng()*458;
+   ellipse(c,x,y,7+rng()*20,2+rng()*6,'#a5957b47',rng()*.6);
+   if(i%6===0){c.fillStyle='#786757';c.fillRect(x-9,y-16,18,28);c.fillStyle='#3e3033';c.fillRect(x-12,y-22,24,8);c.strokeStyle='#c3a98b';c.lineWidth=1;c.strokeRect(x-9,y-16,18,28)}
+  }
+  for(const x of [95,865])for(const y of [164,395]){
+   ellipse(c,x,y+12,38,12,'#05090fa6');c.fillStyle='#382f34';c.fillRect(x-19,y-36,38,47);c.fillStyle='#7f6253';c.fillRect(x-14,y-40,28,8);
+   c.strokeStyle='#bda47d';c.lineWidth=2;c.strokeRect(x-15,y-35,30,43);c.beginPath();c.moveTo(x,y-27);c.lineTo(x,y+3);c.moveTo(x-8,y-17);c.lineTo(x+8,y-17);c.stroke();
+   const aura=c.createRadialGradient(x,y-30,2,x,y-30,70);aura.addColorStop(0,'#bf8e5f65');aura.addColorStop(1,'#8b4a3100');c.fillStyle=aura;c.fillRect(x-75,y-105,150,150)
+  }
+  for(let i=0;i<5;i++){const x=135+i*170;c.strokeStyle='#6b5a51';c.lineWidth=3;c.beginPath();c.moveTo(x,36);c.lineTo(x+9,101);c.stroke();ellipse(c,x+9,101,3,8,'#b69b82')}
+ }
+ // Terceira área: Laboratório Profanado. Objetos estáticos são cacheados por sala.
+ if(depth>=50){
+  const haze=c.createLinearGradient(0,0,W,H);haze.addColorStop(0,'#214336af');haze.addColorStop(.6,'#1c3436a5');haze.addColorStop(1,'#322336c0');c.fillStyle=haze;c.fillRect(0,0,W,H);
+  for(let i=0;i<12;i++){const x=108+(i%6)*147,y=106+Math.floor(i/6)*353;
+   c.fillStyle='#14292c';c.fillRect(x-23,y-30,46,60);c.strokeStyle='#6d8a7d';c.lineWidth=3;c.strokeRect(x-23,y-30,46,60);
+   c.fillStyle='#354e4b';c.fillRect(x-17,y-24,34,14);c.fillStyle='#8eb6a15e';c.fillRect(x-13,y-21,26,7);
+   for(let k=0;k<3;k++){const v=x-11+k*11;c.strokeStyle='#b4d5bb';c.lineWidth=2;c.beginPath();c.moveTo(v,y+6);c.lineTo(v,y+22);c.stroke()}
+  }
+  for(let i=0;i<33;i++){const x=65+rng()*825,y=65+rng()*445,rad=7+rng()*15;
+   ellipse(c,x,y,rad,rad*.24,'#678b6370',rng()*.4);
+   if(i%3===0){c.strokeStyle='#91b27d95';c.lineWidth=2;c.beginPath();c.moveTo(x-rad,y-3);c.lineTo(x,y-7);c.lineTo(x+rad*.6,y-1);c.stroke()}}
+  for(const x of [117,846])for(const y of [200,360]){
+   c.fillStyle='#293137';c.fillRect(x-18,y-29,36,58);c.fillStyle='#5c6d69';c.fillRect(x-22,y-32,44,10);
+   c.strokeStyle='#b6c9ba';c.lineWidth=2;c.strokeRect(x-18,y-29,36,58);
+   c.fillStyle='#8dcc8a90';c.beginPath();c.arc(x,y-2,10,0,Math.PI*2);c.fill();
+  }
+  for(let i=0;i<9;i++){const x=125+i*84;c.strokeStyle='#76847a99';c.lineWidth=3;c.beginPath();c.moveTo(x,33);c.lineTo(x+5,76+i%3*8);c.stroke();ellipse(c,x+5,78+i%3*8,4,4,'#99a589')}
+ }
+ // Demo 2.0.3 — textura arquitetônica pré-renderizada, sem custo a cada frame.
+ // Faixas de pisos gastos, rejunte, pedras glaciais e inscrições decadentes.
+ for(let i=0;i<138;i++){
+  const x=54+rng()*852,y=54+rng()*464,sz=4+rng()*16;
+  if(depth>=25){c.strokeStyle=i%3?'#ae967a3c':'#e3bba43d'}else c.strokeStyle=i%3?'#d6eef03b':'#607e9a5a';
+  c.lineWidth=.6+rng()*.9;c.beginPath();c.moveTo(x-sz,y);c.lineTo(x-sz*.35,y-sz*.21);c.lineTo(x+sz*.34,y+sz*.12);c.lineTo(x+sz,y-sz*.35);c.stroke();
+  if(i%8===0){ellipse(c,x+3,y+2,sz*.65,1.7,depth>=25?'#b49b8559':'#e7f4ef59',rng()*.3)}
+ }
+ // Frisos com ferragens e cravos nas paredes leste/oeste.
+ for(const wall of [49,W-49]){for(let y=75;y<H-48;y+=67){
+   c.fillStyle=depth>=25?'#66534f':'#506d77';c.fillRect(wall-14,y-11,28,23);
+   c.strokeStyle=depth>=25?'#b19d83':'#94b3bd';c.lineWidth=1.3;c.strokeRect(wall-12,y-9,24,19);
+   for(const k of [-7,7])ellipse(c,wall+k,y,1.6,1.6,'#c9baa0');
+ }}
+ // Canteiros de neve, cinzas e pedras junto às estruturas quebradas.
+ for(let i=0;i<19;i++){
+   const side=i%4,x=side===0?89+rng()*95:side===1?W-89-rng()*95:118+rng()*724;
+   const y=side===2?80+rng()*69:side===3?H-80-rng()*69:95+rng()*388;
+   ellipse(c,x+8,y+9,18+rng()*27,5+rng()*5,'#0b172399');
+   ellipse(c,x,y,16+rng()*22,3+rng()*7,depth>=25?'#a2938455':'#daeef098',rng()*.24);
+   if(i%3===0){c.strokeStyle=depth>=25?'#b4a18a':'#cde6ea';c.lineWidth=1.5;c.beginPath();c.moveTo(x-8,y-3);c.lineTo(x+3,y-7);c.lineTo(x+13,y-4);c.stroke()}
+ }
+ // Marcas de lâminas e símbolos no piso; nenhuma área de colisão é afetada.
+ for(let i=0;i<9;i++){
+   const x=130+rng()*700,y=106+rng()*354;
+   c.strokeStyle=depth>=25?'#c59f7665':'#98b9cc66';c.lineWidth=1.3;
+   c.beginPath();c.moveTo(x-11,y-8);c.lineTo(x+12,y+7);c.moveTo(x-6,y+10);c.lineTo(x+14,y-8);c.stroke();
+ }
+ // Demo 1.0.2: arquitetura legível, detalhes estáticos pré-renderizados.
  // Brasões rasgados e correntes antigas nas muralhas.
  for(const bx of [193,767]){
   const by=depth%2?67:73;
@@ -57,6 +117,25 @@ function generate(rx,depth){const rng=random(hash(rx,depth)),cn=document.createE
    const yy=H-103-i*45,xx=459+(i%2?17:-17)+(rng()-.5)*8;
    ellipse(c,xx,yy,5,9,'#101e2a38',-.17);ellipse(c,xx+3,yy-2,2,5,'#b5d0d12f',-.17);
  }
+ // Demo 1.0.2: reforço visual das muralhas, grades, lâmpadas e piso de gelo.
+ for(const xx of [66,894]){
+  for(let yy=62;yy<540;yy+=108){
+   c.fillStyle='#1a2938';c.fillRect(xx-14,yy-27,28,54);c.strokeStyle='#697b82';c.lineWidth=3;c.strokeRect(xx-14,yy-27,28,54);
+   c.strokeStyle='#b3cad081';c.lineWidth=1;c.beginPath();c.moveTo(xx-11,yy-22);c.lineTo(xx+10,yy+21);c.stroke();
+   ellipse(c,xx,yy+12,3,2,'#a9c0c8');
+  }
+ }
+ for(let i=0;i<26;i++){
+  const x=70+rng()*820,y=69+rng()*433; if(Math.abs(x-480)<110&&y<135)continue;
+  const sz=4+rng()*13;c.strokeStyle='#c7ecf081';c.lineWidth=.7+rng();c.beginPath();c.moveTo(x-sz,y+sz*.4);c.lineTo(x,y-sz*.25);c.lineTo(x+sz*.65,y+sz*.15);c.stroke();
+  if(i%4===0){c.fillStyle='#e3f6ef61';c.fillRect(x-3,y-2,7,2)}
+ }
+ // Pedaços de grade, fitas de tecido rasgadas e restos de alvenaria.
+ for(let i=0;i<7;i++){
+  const x=i%2?100+rng()*65:795+rng()*66,y=128+rng()*315;
+  c.strokeStyle='#4f606c';c.lineWidth=3;c.beginPath();c.moveTo(x,y-14);c.lineTo(x,y+16);c.moveTo(x+8,y-13);c.lineTo(x+8,y+14);c.moveTo(x-3,y-7);c.lineTo(x+12,y-7);c.stroke();
+  c.strokeStyle='#d7e5e568';c.lineWidth=1;c.beginPath();c.moveTo(x,y-12);c.lineTo(x,y+7);c.stroke();
+ }
  // Trilha pisada no gelo, levemente iluminada no centro.
  const light=c.createRadialGradient(475,284,20,475,284,395);light.addColorStop(0,'#c4d6dc12');light.addColorStop(1,'#8ca3b000');c.fillStyle=light;c.fillRect(0,0,W,H);
  return cn}
@@ -73,6 +152,16 @@ function bonfire(c,x,y,t,active=false){c.save();c.translate(x,y);const flame=Mat
  c.lineCap='round';for(const [a,b] of [[-1,1],[1,-1]]){c.strokeStyle='#271e1a';c.lineWidth=16;c.beginPath();c.moveTo(-32,15+a*5);c.lineTo(35,17+b*5);c.stroke();c.strokeStyle='#916344';c.lineWidth=4;c.stroke()}
  c.save();c.shadowBlur=32;c.shadowColor='#ec7426';for(let i=0;i<5;i++){let shift=i*10-20;let top=-40-i*4+flame*Math.sin(t*1.3+i);p(c,[[shift-12,15],[shift-7,-5],[shift+5,top],[shift+14,-6],[shift+15,16]],['#aa462c','#d66b2c','#f1a541','#ffcf79','#fbe5a5'][i]);}c.restore();
  c.strokeStyle='#9caab3';c.lineWidth=8;c.beginPath();c.moveTo(3,-3);c.lineTo(1,-84);c.stroke();p(c,[[-7,-80],[2,-104],[10,-79],[2,-70]],'#bcc9cc','#586978',2);c.strokeStyle='#a68155';c.lineWidth=8;c.beginPath();c.moveTo(-17,-32);c.lineTo(19,-33);c.stroke();ellipse(c,1,-33,5,5,'#e5bc79');
+ // Cristais nas pedras, cinzas incandescentes e reflexos animados.
+ for(let i=0;i<9;i++){
+  let a=i*6.283185/9+0.1,xx=Math.cos(a)*37,yy=14+Math.sin(a)*14;
+  ellipse(c,xx,yy,1.8,1.5,i%2?'#f5c68b':'#e7e0cb');
+  c.strokeStyle='#b9d5cf99';c.lineWidth=1.3;c.beginPath();c.moveTo(xx-5,yy-3);c.lineTo(xx,yy-7);c.stroke();
+ }
+ for(let i=0;i<7;i++){
+  const xx=Math.sin(t*.7+i*2.4)*17,yy=-12-(t*17+i*13)%67;
+  ellipse(c,xx,yy,1.3+(i%3)*.5,2.4,'#f0af67a8');
+ }
  // Pedra gravada, brasas em três camadas e luz que pulsa nas lajes.
  for(let i=0;i<6;i++){
   const angle=i*Math.PI/3,px=Math.cos(angle)*57,py=9+Math.sin(angle)*19;
@@ -91,6 +180,8 @@ function bonfire(c,x,y,t,active=false){c.save();c.translate(x,y);const flame=Mat
   p(c,[[dx-6,8],[dx-4,-9],[dx+fl*.4,-27-fl],[dx+8,-1],[dx+4,9]],i===1?'#fff0b7c2':'#f9a44fa0',null);
  }
  for(let i=0;i<11;i++){let phase=(t*30+i*19)%88;c.globalAlpha=(1-phase/88)*.9;ellipse(c,Math.sin(t*.9+i*9)*28,6-phase,1.3+i%3,.9+i%2,i%2?'#fce4ac':'#fa9348')}c.globalAlpha=1;
+ // Placas gravadas na pedra e brilho das cinzas.
+ for(let j=0;j<5;j++){const x=-37+j*18;c.strokeStyle='#d1bd8880';c.lineWidth=1.5;c.beginPath();c.moveTo(x,-1);c.lineTo(x+5,-6);c.lineTo(x+10,-1);c.stroke()}
  if(active){c.strokeStyle='#f2d29688';c.lineWidth=2;c.beginPath();c.ellipse(0,5,78,35,0,0,Math.PI*2);c.stroke()}c.restore()}
 window.DeadWorld={drawBackground,drawPassages,bonfire,roomCacheSize:()=>cache.size};
 })();

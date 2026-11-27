@@ -1,4 +1,4 @@
-/* Dead Souls Demo 1.0.1: personagens desenhados e armazenados como sprites 2D. */
+/* Dead Souls Demo 1.0.2: personagens desenhados e armazenados como sprites 2D. */
 (()=>{'use strict';
 const CACHE=new Map(), palettes={
   wanderer:['#514d56','#8f8784','#362e39','#b49b80'],
@@ -144,7 +144,7 @@ function sprite(kind,variant=''){
   line([[-31,-15],[-20,-19]],'#d5e3e9',2);
  }
 
- // Demo 1.0.1: acabamento de materiais pré-renderizado, sem custo por quadro.
+ // Demo 1.0.2: acabamento de materiais pré-renderizado, sem custo por quadro.
  // Metais lascados: riscos em diagonal, rebites e reflexos diferentes para cada tipo.
  for(let i=0;i<12;i++){
   const xx=-19+((i*13+7)%39), yy=-24+((i*19+11)%48);
@@ -186,7 +186,28 @@ function sprite(kind,variant=''){
    line([[-14,-23],[0,-30],[14,-23]],'#cfdae0',2.5);
    ellipse(-11,-14,2.4,2.4,'#d8c39c');ellipse(11,-14,2.4,2.4,'#d8c39c');
  }
+ // 2.0.3: texturas e detalhes legíveis nos sprites, gerados apenas uma vez.
+ c.save();
+ c.strokeStyle=isBoss?'#d8b68b':'#a3bbc2';c.lineWidth=1.3;
+ for(const side of [-1,1]){
+  const xx=side*21;
+  c.beginPath();c.moveTo(xx,-18);c.lineTo(xx+side*5,-11);c.lineTo(xx+side*3,3);c.stroke();
+  c.strokeStyle='#e8d5ab85';c.beginPath();c.moveTo(side*10,29);c.lineTo(side*14,37);c.stroke();
+ }
+ for(let i=0;i<5;i++){
+  const yy=-25+i*7; c.fillStyle=i%2?'#d0be9b8c':'#333d47';
+  c.fillRect(-8+(i%2)*2,yy,2.6,2.2);
+ }
+ // Lona e manto com pequenos rasgos; capacete com luz de recorte.
+ c.strokeStyle=isBoss?'#e4bd99ad':'#d4e2e177';c.lineWidth=1.15;
+ c.beginPath();c.moveTo(-11,-53);c.lineTo(-6,-59);c.lineTo(2,-61);c.stroke();
+ c.beginPath();c.moveTo(-18,37);c.lineTo(-21,41);c.lineTo(-17,44);c.stroke();
+ c.restore();
  // A imagem é gerada somente uma vez: desempenho melhor em aparelhos modestos.
+ // Demo 1.0.2: pequenas nervuras metálicas, costuras e rebites extras.
+ c.save();c.strokeStyle=isBoss?'#e9c3a775':'#a7bbc36a';c.lineWidth=1.2;
+ for(const side of [-1,1]){c.beginPath();c.moveTo(side*17,-14);c.lineTo(side*24,-4);c.lineTo(side*19,5);c.stroke();ellipse(side*20,-6,1.8,1.8,'#b9a690');}
+ c.strokeStyle='#dce5dd67';for(let i=0;i<6;i++){const y=9+i*5;c.beginPath();c.moveTo(-12,y);c.lineTo(-7,y-2);c.stroke()}c.restore();
  CACHE.set(key,cn);return cn;
 }
 function draw(ctx,kind,x,y,r,variant='',flash=false,move=0,face=1,moving=false,attacking=false){
